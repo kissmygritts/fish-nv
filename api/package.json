@@ -1,0 +1,16 @@
+{
+  "name": "trophy-fish-api",
+  "version": "0.1.0",
+  "description": "An api layer for the trophy fish app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mitchell Gritts <mitchellgritts@gmail.com> (mitchellgritts.com)",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "fastify": "^2.14.1",
+    "pg-promise": "^10.5.6"
+  }
+}
