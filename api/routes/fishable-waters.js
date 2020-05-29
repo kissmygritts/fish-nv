@@ -1,10 +1,14 @@
-const { getFishableWaters } = require('../controllers/fishable-waters')
+const { getFishableWaters, getFishableWatersById } = require('../controllers/fishable-waters')
 
 const routes = [
   {
     method: 'GET',
     url: '/fishable-waters',
     handler: getFishableWaters
+  }, {
+    method: 'GET',
+    url: '/fishable-waters/:id',
+    handler: getFishableWatersById
   }
 ]
 // alternative route declaration

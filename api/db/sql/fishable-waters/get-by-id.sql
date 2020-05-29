@@ -5,10 +5,7 @@ SELECT
   fw.region,
   fw.county,
   species.species_arr AS species,
-  json_build_array(
-    st_Y(st_PointOnSurface(fw.geom)),
-    st_X(st_PointOnSurface(fw.geom))
-  ) as coordinates
+  st_asGeoJSON(geom, 5) as geojson
 FROM fishable_waters AS fw
   JOIN (
     SELECT
@@ -18,3 +15,4 @@ FROM fishable_waters AS fw
       JOIN species_water_joiner ON species.id = species_water_joiner.species_id
     GROUP BY species_water_joiner.water_id
   ) AS species ON fw.id = species.water_id
+WHERE fw.id = $<id>;
