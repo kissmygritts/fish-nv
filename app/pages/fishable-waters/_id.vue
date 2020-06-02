@@ -12,7 +12,7 @@
           v-for="(tag, index) in tags"
           :key="index"
           :text="tag"
-          class="mr-2 rounded"
+          class="mr-2 rounded capitalize"
         />
       </div>
     </header>
@@ -67,8 +67,8 @@ export default {
 
     tags () {
       return [
-        this.fishableWater.region,
-        this.fishableWater.county,
+        `${this.fishableWater.region} region`,
+        `${this.fishableWater.county} county`,
         ...this.fishableWater.species
       ]
     }
