@@ -1,10 +1,11 @@
 <template>
   <client-only>
-    <l-map>
+    <l-map :center="center" :zoom="zoom">
       <l-tile-layer :url="url" />
       <marker-with-tooltip
         v-for="(water, index) in fishableWaters"
         :key="index"
+        :fishable-water-id="water.id"
         :lat-lng="water.coordinates"
       >
         <p>{{ water.water_name }}</p>
@@ -31,10 +32,8 @@ export default {
   data () {
     return {
       url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      mapPoints: [
-        [47.4132, -1.2914],
-        [0, 0]
-      ]
+      center: [38.64954285997146, -116.77592011899117],
+      zoom: 6
     }
   }
 }

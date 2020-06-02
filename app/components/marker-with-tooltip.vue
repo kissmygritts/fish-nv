@@ -1,5 +1,5 @@
 <template>
-  <l-marker :lat-lng="latLng" :color="color">
+  <l-marker :lat-lng="latLng" :color="color" @click="clicker(fishableWaterId)">
     <l-tooltip><slot>tooltip content</slot></l-tooltip>
   </l-marker>
 </template>
@@ -9,6 +9,11 @@ export default {
   name: 'MarkerWithTooltip',
 
   props: {
+    fishableWaterId: {
+      type: String,
+      require: true,
+      default: ''
+    },
     latLng: {
       type: Array,
       require: true,
@@ -19,6 +24,16 @@ export default {
     color: {
       type: String,
       default: '#6958d0'
+    }
+  },
+
+  methods: {
+    clicker (fishableWaterId) {
+      // eslint-disable-next-line
+      console.log(`navigate to /fishable-waters/${fishableWaterId}`)
+      this.$router.push({
+        path: `/fishable-waters/${fishableWaterId}`
+      })
     }
   }
 }
