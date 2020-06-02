@@ -1,0 +1,18 @@
+<template>
+  <span class="px-3 py-1 text-xs md:text-sm bg-gray-200">
+    {{ text }}
+  </span>
+</template>
+
+<script>
+export default {
+  name: 'TwTag',
+  props: {
+    text: {
+      type: String,
+      required: true,
+      default: 'text'
+    }
+  }
+}
+</script>

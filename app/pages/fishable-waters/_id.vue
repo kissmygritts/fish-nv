@@ -1,63 +1,36 @@
 <template>
   <div class="text-gray-900">
     <header class="px-2 py-6 md:px-4 md:py-8 lg:px-8">
-      <h1 class="text-4xl">
+      <h1 class="text-4xl leading-loose">
         {{ fishableWater.water_name }}
+        <span class="text-2xl font-thin tracking-wide text-gray-600 pl-2">
+          {{ fishableWater.label }}
+        </span>
       </h1>
+      <div>
+        <tw-tag
+          v-for="(tag, index) in tags"
+          :key="index"
+          :text="tag"
+          class="mr-2 rounded"
+        />
+      </div>
     </header>
 
-    <div class="flex flex-wrap w-100">
-      <div id="map" class="w-full lg:w-3/5 bg-blue-400">
-        <geo-json-map :geojson="parsedGeoJson" />
-      </div>
-      <div class="w-full lg:w-2/5 bg-green-400 py-8 px-6">
-        <table class="text-xl table-auto min-w-full">
-          <tr>
-            <td class="font-bold tracking-wide">
-              Name
-            </td>
-            <td class="py-1">
-              {{ fishableWater.water_name }}
-            </td>
-          </tr>
-          <tr>
-            <td class="font-bold tracking-wide">
-              Label
-            </td>
-            <td class="py-1">
-              {{ fishableWater.label }}
-            </td>
-          </tr>
-          <tr>
-            <td class="font-bold tracking-wide">
-              Region
-            </td>
-            <td class="py-1">
-              {{ fishableWater.region }}
-            </td>
-          </tr>
-          <tr>
-            <td class="font-bold tracking-wide">
-              County
-            </td>
-            <td class="py-1">
-              {{ fishableWater.county }}
-            </td>
-          </tr>
-          <tr>
-            <td class="font-bold tracking-wide">
-              Species
-            </td>
-            <td class="py-1">
-              {{ fishableWater.species.join(', ') }}
-            </td>
-          </tr>
-        </table>
-      </div>
+    <div id="map" class="w-full">
+      <geo-json-map
+        :geojson="parsedGeoJson"
+        class="w-full"
+      />
     </div>
 
-    <div class="w-100 text-center pt-16">
-      LEVEL FOR RECORDS
+    <div class="bg-gray-100 text-gray-700">
+      <div class="w-100 pt-12 container px-5 py-12 mx-auto">
+        <h2 class="text-lg tracking-wide font-light text-left md:text-center">
+          Water Records
+        </h2>
+        <stat-container class="pt-10 pb-5" />
+      </div>
     </div>
 
     <div class="w-100 text-center pt-16">
@@ -69,10 +42,14 @@
 <script>
 import axios from 'axios'
 import GeoJsonMap from '@/components/geojson-map.vue'
+import StatContainer from '@/components/elements/stat-container.vue'
+import TwTag from '@/components/elements/tw-tag.vue'
 
 export default {
   components: {
-    GeoJsonMap
+    GeoJsonMap,
+    StatContainer,
+    TwTag
   },
 
   async asyncData ({ params }) {
@@ -86,6 +63,14 @@ export default {
   computed: {
     parsedGeoJson () {
       return JSON.parse(this.fishableWater.geojson)
+    },
+
+    tags () {
+      return [
+        this.fishableWater.region,
+        this.fishableWater.county,
+        ...this.fishableWater.species
+      ]
     }
   }
 }
@@ -93,6 +78,6 @@ export default {
 
 <style scoped>
 #map {
-  height: 400px;
+  height: 50vh;
 }
 </style>
