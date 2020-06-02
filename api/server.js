@@ -1,6 +1,11 @@
 const fastify = require('fastify')({ logger: true })
 const routes = require('./routes/fishable-waters')
 
+// register fastify middleware
+fastify.register(require('fastify-cors'), {
+  origin: '*'
+})
+
 // register routes
 routes.forEach((route) => {
   fastify.route(route)
