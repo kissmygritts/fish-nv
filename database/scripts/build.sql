@@ -16,6 +16,37 @@ CREATE TABLE etl.species_water_joiner (
   species text
 );
 
+-- fisheries species from the trophy database
+CREATE TABLE etl.fs (
+  id int,
+  species text,
+  min_tropy_weight text,
+  tf_db_name text
+);
+
+CREATE TABLE etl.fish_entries (
+  recno int,
+  species text,
+  date_cat text,
+  pounds text,
+  ounces text,
+  length text,
+  girth text,
+  water text,
+  county text,
+  tackle text,
+  ang_name text,
+  ang_age text,
+  ang_res text,
+  city text,
+  state text,
+  zip text,
+  date_rec text,
+  picture text,
+  data_entry text,
+  date_entered text
+);
+
 -- create tables in public schema to load into
 CREATE TABLE public.species (
   id uuid PRIMARY KEY default uuid_generate_v4(),
