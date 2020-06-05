@@ -69,4 +69,21 @@ CREATE TABLE public.species_water_joiner (
   water_id uuid references fishable_waters(id)
 );
 
+CREATE TABLE public.fish_entries (
+  id uuid PRIMARY KEY default uuid_generate_v4(),
+  species_id uuid references species(id),
+  water_id uuid references fishable_waters(id),
+  date_caught date,
+  pounds int,
+  ounces int,    
+  fish_weight int,  -- in ounces
+  fish_length real,
+  fish_girth real,
+  tackle text,
+  angler_name text,
+  angler_city text,
+  angler_state text,
+  exceptions text
+);
+
 COMMIT;

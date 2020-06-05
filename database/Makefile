@@ -1,4 +1,8 @@
 DATA = /Users/mitchellgritts/Documents/projects/ndow/trophy-fish/data
+LOADOBJS = scripts/load-01-fishable-waters.sql \
+					 scripts/load-02-tf-wrangle-species.sql \
+					 scripts/load-03-tf-wrangle-entries.sql \
+					 scripts/load-04-tf-entries.sql
 URI = trophy_fish
 # URI = postgres://gus_su_admin@gus.cotwjstfvxik.us-west-2.rds.amazonaws.com:5432/dev
 # URI = postgres://gus_su_admin@gus.cotwjstfvxik.us-west-2.rds.amazonaws.com:5432/gus
@@ -16,8 +20,11 @@ extract: build utfify $(DATA)/tf-utf8.csv
 	psql $(URI) -c "\copy etl.fish_entries from '$(DATA)/tf-utf8.csv' with csv header"
 	ogr2ogr -f PostgreSQL "PG:dbname=trophy_fish" -lco SCHEMA=etl $(DATA)/fishable-waters.gpkg
 
-load: scripts/transform-load.sql extract
-	@psql $(URI) -a -f $<
+loadscript.sql: $(LOADOBJS)
+	cat $(LOADOBJS) > $@
+
+load: loadscript.sql extract
+	@psql $(URI) --single-transaction -f $<
 
 
 clean: scripts/drop.sql

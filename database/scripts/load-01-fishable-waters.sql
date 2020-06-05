@@ -1,5 +1,4 @@
-BEGIN;
-
+/* LOAD FISHABLE WATER DATA INTO DATABASE */
 --
 INSERT INTO public.species (
   species, abbr
@@ -31,5 +30,3 @@ SELECT
 FROM etl.species_water_joiner
   LEFT JOIN public.species ON etl.species_water_joiner.abbr = public.species.abbr
   LEFT JOIN public.fishable_waters ON etl.species_water_joiner.label = public.fishable_waters.label;
-
-COMMIT;

@@ -35,7 +35,7 @@ FROM etl.fs as t
       WHERE tf_db_name IS NULL
     ) AS sp
   ) AS s ON t.id = s.id
-WHERE etl.fs.id = s.id
+WHERE etl.fs.id = s.id;
 
 -- 4. append formated species names to public.species
 INSERT INTO public.species 
