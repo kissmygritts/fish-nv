@@ -91,6 +91,28 @@ SET county = 'White Pine'
 WHERE county ilike '%white pine%'
   OR county ilike 'wp%';
 
+/* POUNDS AND OUNCES FIXES */
+-- null values to "0"
+UPDATE etl.fish_entries
+SET pounds = '0'
+WHERE pounds IS NULL;
+
+UPDATE etl.fish_entries
+SET ounces = '0'
+WHERE ounces IS NULL;
+
+/* ANGLER LOCATION CLEANUP */
+UPDATE etl.fish_entries
+SET state = upper(trim(both ' ' from state));
+
+/* TACKEL CLEANUP */
+UPDATE etl.fish_entries
+SET tackle = NULL
+WHERE tackle = '-0-';
+
+UPDATE etl.fish_entries
+SET tackle = lower(tackle);
+
 /* TROPHY FISH WATER NAME CLEANUP */
 -- TODO: total of 197 waters that need cleaned. Best to
 -- do it in the Access database to clean up the records.

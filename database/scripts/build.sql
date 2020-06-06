@@ -94,6 +94,7 @@ CREATE OR REPLACE VIEW fishable_waters_route AS
     fw.label,
     fw.region,
     fw.county,
+    species.species_arr AS species,
     (
       SELECT jsonb_agg(row_to_json(fe))
       FROM (
