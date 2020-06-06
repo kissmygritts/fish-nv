@@ -17,6 +17,7 @@
       </div>
     </header>
 
+    <!-- map of the fishable water -->
     <div id="map" class="w-full">
       <geo-json-map
         :geojson="parsedGeoJson"
@@ -24,12 +25,16 @@
       />
     </div>
 
+    <!-- water records -->
     <div class="bg-gray-100 text-gray-700">
       <div class="w-100 pt-12 container px-5 py-12 mx-auto">
         <h2 class="text-lg tracking-wide font-light text-left md:text-center">
           Water Records
         </h2>
-        <stat-container class="pt-10 pb-5" />
+        <stat-container
+          :water-records="getWaterRecords"
+          class="pt-10 pb-5"
+        />
       </div>
     </div>
 
@@ -61,6 +66,34 @@ export default {
   },
 
   computed: {
+    getWaterRecords () {
+      const fishArray = this.fishableWater.fish_entries
+
+      const fishObj = fishArray.reduce((acc, obj) => {
+        /*
+        I borrowed this function from MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
+        */
+        const key = obj.species
+
+        if (!acc[key]) {
+          acc[key] = { weight: 0 }
+        }
+
+        if (obj.fish_weight && obj.fish_weight > acc[key].weight) {
+          acc[key] = obj
+        }
+
+        return acc
+      }, {})
+
+      return Object.keys(fishObj).map(m => ({
+        species: m,
+        weight: fishObj[m].fish_weight,
+        pounds: fishObj[m].pounds,
+        ounces: fishObj[m].ounces
+      }))
+    },
+
     parsedGeoJson () {
       return JSON.parse(this.fishableWater.geojson)
     },
