@@ -7,11 +7,11 @@ class FishableWatersRepository {
   }
 
   async getAll() {
-    return this.db.any(sql.getAll)
+    return this.db.manyOrNone(sql.getAll)
   }
 
   async getById(id) {
-    return this.db.one(sql.getById, id)
+    return this.db.oneOrNone(sql.getById, id)
   }
 }
 
