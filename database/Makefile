@@ -28,4 +28,4 @@ load: loadscript.sql extract
 
 
 clean: scripts/drop.sql
-	@psql $(URI) -a -f $<
+	@psql $(URI) -f $<

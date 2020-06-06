@@ -1,3 +1,5 @@
+DROP VIEW IF EXISTS fishable_waters_route;
+
 DROP TABLE IF EXISTS fish_entries CASCADE;
 DROP TABLE IF EXISTS species_water_joiner CASCADE;
 DROP TABLE IF EXISTS fishable_waters CASCADE;

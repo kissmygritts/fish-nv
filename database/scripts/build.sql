@@ -86,4 +86,42 @@ CREATE TABLE public.fish_entries (
   exceptions text
 );
 
+/* VIEW FOR FISHABLE WATER API ENDPOINT */
+CREATE OR REPLACE VIEW fishable_waters_route AS
+  SELECT
+    fw.id,
+    fw.water_name,
+    fw.label,
+    fw.region,
+    fw.county,
+    (
+      SELECT array_agg(row_to_json(fe))
+      FROM (
+        SELECT
+          species.species,
+          fish_entries.water_id,
+          fish_entries.date_caught,
+          fish_entries.pounds,
+          fish_entries.ounces,
+          fish_entries.fish_weight,
+          fish_entries.fish_length,
+          fish_entries.angler_name,
+          fish_entries.angler_city,
+          fish_entries.angler_state
+        FROM fish_entries
+          JOIN species ON fish_entries.species_id = species.id
+        WHERE fish_entries.water_id = fw.id
+      ) AS fe
+    ) AS fish_entries,
+    st_asGeoJSON(geom, 5) as geojson
+  FROM fishable_waters AS fw
+    JOIN (
+      SELECT
+        species_water_joiner.water_id,
+        jsonb_agg(species.species) as species_arr
+      FROM species
+        JOIN species_water_joiner ON species.id = species_water_joiner.species_id
+      GROUP BY species_water_joiner.water_id
+    ) AS species ON fw.id = species.water_id;
+
 COMMIT;
