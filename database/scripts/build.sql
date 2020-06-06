@@ -95,7 +95,7 @@ CREATE OR REPLACE VIEW fishable_waters_route AS
     fw.region,
     fw.county,
     (
-      SELECT array_agg(row_to_json(fe))
+      SELECT jsonb_agg(row_to_json(fe))
       FROM (
         SELECT
           species.species,
@@ -111,6 +111,7 @@ CREATE OR REPLACE VIEW fishable_waters_route AS
         FROM fish_entries
           JOIN species ON fish_entries.species_id = species.id
         WHERE fish_entries.water_id = fw.id
+        ORDER BY species.species, fish_entries.fish_weight DESC
       ) AS fe
     ) AS fish_entries,
     st_asGeoJSON(geom, 5) as geojson

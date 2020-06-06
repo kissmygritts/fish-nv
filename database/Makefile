@@ -27,5 +27,9 @@ load: loadscript.sql extract
 	@psql $(URI) --single-transaction -f $<
 
 
-clean: scripts/drop.sql
-	@psql $(URI) -f $<
+clean: 
+	@psql $(URI) -c "drop schema if exists etl cascade"
+
+drop:
+	dropdb $(URI)
+	createdb $(URI)
