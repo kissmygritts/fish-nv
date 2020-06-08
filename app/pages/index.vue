@@ -1,6 +1,8 @@
 <template>
-  <div class="h-screen w-full">
-    <basemap :fishable-waters="fishableWaters" />
+  <div id="map" class="w-full">
+    <basemap
+      :fishable-waters="fishableWaters"
+    />
   </div>
 </template>
 
@@ -26,4 +28,7 @@ export default {
   @apply min-h-screen flex justify-center items-center text-center mx-auto;
 }
 */
+#map {
+  height: 100vh;
+}
 </style>
