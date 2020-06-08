@@ -39,7 +39,14 @@
     </div>
 
     <div class="w-100 text-center pt-16">
-      TABLE FOR RECORDS FROM WATER
+      <h2 class="text-lg tracking-wide font-light text-left md:text-center">
+        All Fish Entries
+      </h2>
+
+      <simple-table
+        :table-data="fishTable"
+        class="pt-10 pb-5"
+      />
     </div>
   </div>
 </template>
@@ -47,12 +54,14 @@
 <script>
 import axios from 'axios'
 import GeoJsonMap from '@/components/geojson-map.vue'
+import SimpleTable from '@/components/elements/simple-table.vue'
 import StatContainer from '@/components/elements/stat-container.vue'
 import TwTag from '@/components/elements/tw-tag.vue'
 
 export default {
   components: {
     GeoJsonMap,
+    SimpleTable,
     StatContainer,
     TwTag
   },
@@ -92,6 +101,19 @@ export default {
         pounds: fishObj[m].pounds,
         ounces: fishObj[m].ounces
       }))
+    },
+
+    fishTable () {
+      return this.fishableWater.fish_entries
+        .map(m => ({
+          'angler name': m.angler_name,
+          species: m.species,
+          pounds: m.pounds,
+          ounces: m.ounces,
+          'angler city': m.angler_city,
+          'angler state': m.angler_state
+        }))
+        .slice(0, 25)
     },
 
     parsedGeoJson () {
