@@ -32,9 +32,16 @@
           Water Records
         </h2>
         <stat-container
+          v-if="hasFishEntries"
           :water-records="getWaterRecords"
           class="pt-10 pb-5"
         />
+        <div
+          v-else
+          class="pt-4 text-center"
+        >
+          No fish have been reported from {{ fishableWater.water_name }}
+        </div>
       </div>
     </div>
 
@@ -44,9 +51,17 @@
       </h2>
 
       <simple-table
+        v-if="hasFishEntries"
         :table-data="fishTable"
         class="pt-10 pb-5"
       />
+
+      <div
+        v-else
+        class="pt-4"
+      >
+        No fish have been reported from {{ fishableWater.water_name }}
+      </div>
     </div>
   </div>
 </template>
@@ -112,6 +127,10 @@ export default {
           'angler state': m.angler_state
         }))
         .slice(0, 25)
+    },
+
+    hasFishEntries () {
+      return !!this.fishableWater.fish_entries
     },
 
     parsedGeoJson () {
