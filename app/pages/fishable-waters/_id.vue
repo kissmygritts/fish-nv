@@ -1,6 +1,6 @@
 <template>
   <div class="text-gray-900">
-    <header class="px-2 py-6 md:px-4 md:py-8 lg:px-8">
+    <header class="px-2 py-6 md:px-4 md:py-8 lg:px-8 container mx-auto">
       <h1 class="text-4xl leading-loose">
         {{ fishableWater.water_name }}
         <span class="text-2xl font-thin tracking-wide text-gray-600 pl-2">
@@ -45,8 +45,8 @@
       </div>
     </div>
 
-    <div class="w-100 text-center pt-16">
-      <h2 class="text-lg tracking-wide font-light text-left md:text-center">
+    <div class="w-100 text-center pt-16 container mx-auto">
+      <h2 class="text-lg tracking-wide font-light text-left md:text-center px-5">
         All Fish Entries
       </h2>
 
