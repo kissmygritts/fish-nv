@@ -7,14 +7,14 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Basemap from '@/components/basemap.vue'
 
 export default {
   components: { Basemap },
 
-  async asyncData ({ params }) {
-    const res = await axios.get('http://localhost:3030/fishable-waters')
+  async asyncData ({ $axios }) {
+    const res = await $axios.get('/api/fishable-waters')
+
     return {
       fishableWaters: res.data
     }

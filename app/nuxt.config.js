@@ -44,6 +44,7 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/proxy',
     'nuxt-leaflet'
   ],
   /*
@@ -51,6 +52,14 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+    proxy: true
+  },
+
+  proxy: {
+    '/api/': {
+      target: 'http://0.0.0.0:8000',
+      pathRewrite: { '^/api/': ''}
+    }
   },
   /*
   ** Build configuration

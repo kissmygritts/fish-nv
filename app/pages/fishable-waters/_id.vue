@@ -52,7 +52,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import GeoJsonMap from '@/components/geojson-map.vue'
 import SimpleTable from '@/components/elements/simple-table.vue'
 import StatContainer from '@/components/elements/stat-container.vue'
@@ -66,9 +65,10 @@ export default {
     TwTag
   },
 
-  async asyncData ({ params }) {
-    const url = `http://localhost:3030/fishable-waters/${params.id}`
-    const res = await axios.get(url)
+  async asyncData ({ params, $axios }) {
+    const url = `/api/fishable-waters/${params.id}`
+
+    const res = await $axios.get(url)
     return {
       fishableWater: res.data
     }
@@ -79,9 +79,7 @@ export default {
       const fishArray = this.fishableWater.fish_entries
 
       const fishObj = fishArray.reduce((acc, obj) => {
-        /*
-        I borrowed this function from MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
-        */
+        // I borrowed this function from MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
         const key = obj.species
 
         if (!acc[key]) {

@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/proxy": "^2.0.0",
     "nuxt": "^2.0.0",
-    "nuxt-leaflet": "0.0.21",
-    "vuejs-smart-table": "0.0.5"
+    "nuxt-leaflet": "0.0.21"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^2.0.0",
