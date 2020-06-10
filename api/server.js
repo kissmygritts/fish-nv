@@ -13,7 +13,7 @@ routes.forEach((route) => {
 
 const start = async () => {
   try {
-    await fastify.listen(3030)
+    await fastify.listen({ port: 8000, host: '0.0.0.0' })
     fastify.log.info(`server listening on ${fastify.server.address().port}`)
   } catch (err) {
     fastify.log.error(err)
