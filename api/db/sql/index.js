@@ -4,7 +4,10 @@ const path = require('path')
 module.exports = {
   fishableWaters: {
     getAll: sql('fishable-waters/get-all.sql'),
-    getById: sql('fishable-waters/get-by-id.sql')
+    getById: sql('fishable-waters/get-by-id.sql'),
+  },
+  geojson: {
+    getGeoJson: sql('geojson/geojson.sql')
   }
 }
 

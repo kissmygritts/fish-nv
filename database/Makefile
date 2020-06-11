@@ -17,7 +17,7 @@ extract: build utfify $(DATA)/tf-utf8.csv
 	psql $(URI) -c "\copy etl.fs from '$(DATA)/trophy-fish-species.csv' with csv header"
 	psql $(URI) -c "\copy etl.fish_entries from '$(DATA)/tf-utf8.csv' with csv header"
 	# the following line throws an warning, but imports the data
-	ogr2ogr -f PostgreSQL "PG:$(URI)" -lco SCHEMA=etl $(DATA)/fishable-waters.gpkg
+	ogr2ogr -f PostgreSQL "PG:dbname=$(URI)" -lco SCHEMA=etl $(DATA)/fishable-waters.gpkg
 
 loadscript.sql: $(LOADOBJS)
 	cat $(LOADOBJS) > $@
