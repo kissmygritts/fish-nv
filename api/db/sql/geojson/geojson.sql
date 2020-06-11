@@ -7,5 +7,4 @@ FROM (
   SELECT
     *
   FROM fishable_waters
-  LIMIT 5
 ) AS sq
