@@ -5,6 +5,8 @@ SELECT
   ) AS geojson
 FROM (
   SELECT
-    *
-  FROM fishable_waters
+    geom
+    $<columns:raw>
+  FROM $<table:name>
+  LIMIT 3
 ) AS sq
