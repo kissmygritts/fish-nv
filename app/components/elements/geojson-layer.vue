@@ -39,6 +39,11 @@ export default {
             sticky: true
           }
         )
+
+        // add event
+        layer.on('click', (e) => {
+          this.$emit('click:feature', { ...feature.properties })
+        })
       }
     }
   }

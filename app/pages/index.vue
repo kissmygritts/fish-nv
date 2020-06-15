@@ -2,7 +2,11 @@
   <div id="map" class="w-full">
     <l-map :center="center" :zoom="zoom">
       <l-tile-layer :url="url" />
-      <geo-json-layer :geojson="fishableWaters.geojson" :enable-tooltip="true" />
+      <geo-json-layer
+        :geojson="fishableWaters.geojson"
+        :enable-tooltip="true"
+        @click:feature="navigateTo"
+      />
     </l-map>
   </div>
 </template>
@@ -27,6 +31,14 @@ export default {
       url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
       center: [38.64954285997146, -116.77592011899117],
       zoom: 6
+    }
+  },
+
+  methods: {
+    navigateTo (feature) {
+      this.$router.push({
+        path: `fishable-waters/${feature.id}`
+      })
     }
   }
 }
