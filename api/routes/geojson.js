@@ -1,6 +1,7 @@
 const as = require('pg-promise/lib/formatting').as
 const { db, sql } = require('../db')
 
+// declare route schema
 const schema = {
   description: 'Return table as GeoJSON',
   params: {
@@ -17,17 +18,18 @@ const schema = {
   }
 }
 
+// route logic (business logic?)
 async function geojsonHandler (req, reply) {
   console.log(req)
 
+  // TODO: pull into the spatial repo?
   const q = {
     ...req.params,
     columns: req.query.columns
       ? `, ${as.name(req.query.columns)}`
       :''
   }
-
-  console.log(as.format(sql.spatial.getGeoJson, q))
+  
   return db.oneOrNone(sql.spatial.getGeoJson, q)
 }
 
