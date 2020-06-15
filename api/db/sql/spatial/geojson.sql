@@ -8,5 +8,4 @@ FROM (
     geom
     $<columns:raw>
   FROM $<table:name>
-  LIMIT 3
 ) AS sq

@@ -20,16 +20,21 @@ const schema = {
 
 // route logic (business logic?)
 async function geojsonHandler (req, reply) {
-  console.log(req)
-
   // TODO: pull into the spatial repo?
+  // construct query object
   const q = {
     ...req.params,
     columns: req.query.columns
-      ? `, ${as.name(req.query.columns)}`
-      :''
+      ? req.query.columns
+        .split(',')
+        .map(as.name)
+        .concat(' ')
+        .reverse()
+        .join(', ')
+      : ''
   }
-  
+
+  // make call to the database
   return db.oneOrNone(sql.spatial.getGeoJson, q)
 }
 
