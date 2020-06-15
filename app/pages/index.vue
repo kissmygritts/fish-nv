@@ -13,7 +13,6 @@
 
 <script>
 import GeoJsonLayer from '@/components/elements/geojson-layer.vue'
-// import Basemap from '@/components/basemap.vue'
 
 export default {
   components: { GeoJsonLayer },
@@ -45,11 +44,6 @@ export default {
 </script>
 
 <style>
-/* Sample `apply` at-rules with Tailwind CSS
-.container {
-  @apply min-h-screen flex justify-center items-center text-center mx-auto;
-}
-*/
 #map {
   height: 100vh;
 }

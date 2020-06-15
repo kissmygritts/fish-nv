@@ -27,7 +27,9 @@ export default {
 
   methods: {
     setMapBounds () {
-      this.$refs.map.setBounds(this.$refs.geojson.getBounds())
+      this.$refs.map.setBounds(this.$refs.geojson.getBounds(), {
+        padding: [500, 500]
+      })
     }
   }
 }

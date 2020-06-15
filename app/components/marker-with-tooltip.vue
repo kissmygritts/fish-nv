@@ -29,8 +29,6 @@ export default {
 
   methods: {
     clicker (fishableWaterId) {
-      // eslint-disable-next-line
-      console.log(`navigate to /fishable-waters/${fishableWaterId}`)
       this.$router.push({
         path: `/fishable-waters/${fishableWaterId}`
       })
