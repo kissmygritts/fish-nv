@@ -26,41 +26,60 @@
     </div>
 
     <!-- water records -->
-    <div class="bg-gray-100 text-gray-700">
-      <div class="w-100 pt-12 container px-5 py-12 mx-auto">
-        <h2 class="text-lg tracking-wide font-light text-left md:text-center">
-          Water Records
-        </h2>
-        <stat-container
-          v-if="hasFishEntries"
-          :water-records="getWaterRecords"
-          class="pt-10 pb-5"
-        />
-        <div
-          v-else
-          class="pt-4 text-center"
-        >
-          No fish have been reported from {{ fishableWater.water_name }}
+    <div>
+      <!-- if hasFishEntries === true -->
+      <div v-if="hasFishEntries">
+        <div class="bg-gray-100 text-gray-700">
+          <div class="w-100 pt-12 container px-5 py-12 mx-auto">
+            <h2 class="text-lg tracking-wide font-light text-left md:text-center">
+              Water Records
+            </h2>
+            <stat-container
+              :water-records="getWaterRecords"
+              class="pt-10 pb-5"
+            />
+          </div>
+        </div>
+
+        <div class="w-100 text-center pt-16 container mx-auto">
+          <h2 class="text-lg tracking-wide font-light text-left md:text-center px-5">
+            All Fish Entries
+          </h2>
+
+          <simple-table
+            :table-data="fishTable"
+            class="pt-10 pb-5"
+          />
         </div>
       </div>
-    </div>
-
-    <div class="w-100 text-center pt-16 container mx-auto">
-      <h2 class="text-lg tracking-wide font-light text-left md:text-center px-5">
-        All Fish Entries
-      </h2>
-
-      <simple-table
-        v-if="hasFishEntries"
-        :table-data="fishTable"
-        class="pt-10 pb-5"
-      />
-
-      <div
-        v-else
-        class="pt-4"
-      >
-        No fish have been reported from {{ fishableWater.water_name }}
+      <!-- if hasFishEntreis === false -->
+      <div v-else class="bg-gray-100 py-16">
+        <div class="container mx-auto flex flex-wrap items-center justify-center">
+          <div class="img-container">
+            <img
+              id="img"
+              class="object-contain h-full w-full"
+              src="~/assets/img/undraw_fishing_hoxa.png"
+            >
+          </div>
+          <div class="w-4/5 px-6 text-center md:text-left md:w-1/2 lg:w-1/3 md:-ml-8 lg:ml-0">
+            <h3 class="text-gray-800 text-xl tracking-wide uppercase leading-loose">
+              You can be first!
+            </h3>
+            <p class="text-gray-700">
+              Fish have not been caught and reported to NDOW from {{ fishableWater.water_name }}.
+              You can be the first!
+            </p>
+            <div class="mt-6">
+              <a
+                href="#"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Buy a fishing license
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -151,5 +170,14 @@ export default {
 <style scoped>
 #map {
   height: 50vh;
+}
+
+.img-container {
+  width: 325px;
+  height: 325px;
+}
+
+#img {
+  mix-blend-mode: multiply;
 }
 </style>
