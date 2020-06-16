@@ -6,6 +6,13 @@ const routes = [
   {
     method: 'GET',
     url: '/fishable-waters',
+    schema: {querystring: {
+        'water_name': {
+          type: 'string',
+          description: 'The name of a water body in Nevada'
+        }
+      }
+    },
     handler: getFishableWaters
   },
   // GET /fishable-waters/:id
