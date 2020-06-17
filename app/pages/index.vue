@@ -14,7 +14,7 @@
       </p>
     </main>
 
-    <aside class="bg-gray-100 w-1/4 flex flex-col px-8">
+    <aside class="bg-gray-100 w-1/4 flex flex-col px-8 overflow-y-auto">
       <!-- search box -->
       <div class="relative py-4">
         <div
@@ -34,16 +34,36 @@
         </div>
         <input
           id="search"
+          v-model="search.query"
           type="text"
           class="block w-full pl-10 py-3 text-gray-800 placeholder-gray-500 rounded-md shadow-sm focus:outline-none focus:shadow-outline"
           placeholder="Search..."
+          @keyup.enter="searchFishableWaters"
         >
       </div>
       <!-- results -->
-      <div class="w-full h-full bg-white mt-2">
-        <pre><code>
-          search results
-        </code></pre>
+      <div class="w-full mt-2 mb-4">
+        <div v-if="hasSearchResults">
+          <div
+            v-for="water in search.results"
+            :key="water.id"
+          >
+            <div
+              class="flex items-center justify-between p-3 w-full bg-white border-b-2 border-gray-100 last:border-b-0 rounded-none last:border-b-full"
+            >
+              <div>
+                <h2 class="text-gray-800 text-lg">
+                  {{ water.water_name }}
+                </h2>
+              </div>
+              <div>
+                <h3 class="text-gray-500 font-light tracking-wide">
+                  {{ water.label }}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </aside>
   </div>
@@ -65,9 +85,20 @@ export default {
 
   data () {
     return {
+      search: {
+        query: null,
+        loading: false,
+        results: null
+      },
       url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
       center: [38.64954285997146, -116.77592011899117],
       zoom: 6
+    }
+  },
+
+  computed: {
+    hasSearchResults () {
+      return !!this.search.results
     }
   },
 
@@ -76,6 +107,13 @@ export default {
       this.$router.push({
         path: `fishable-waters/${feature.id}`
       })
+    },
+
+    async searchFishableWaters () {
+      this.search.loading = true
+      const res = await this.$axios.get(`/api/fishable-waters?water_name=${this.search.query}`)
+      this.search.results = res.data
+      this.search.loading = false
     }
   }
 }
