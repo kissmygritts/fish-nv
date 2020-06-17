@@ -42,7 +42,7 @@
         >
       </div>
       <!-- results -->
-      <div class="w-full mt-2 mb-4">
+      <div class="w-full mt-2">
         <div v-if="hasSearchResults">
           <div
             v-for="water in search.results"
@@ -99,6 +99,17 @@ export default {
   computed: {
     hasSearchResults () {
       return !!this.search.results
+    },
+
+    searchUrl () {
+      if (this.search.query) {
+        let s = this.search.query
+          .replaceAll(/\s*[,;:.-_]\s*/g, ',')
+        s = new URLSearchParams({ s })
+        return `/api/fishable-waters?${s.toString()}`
+      } else {
+        return ''
+      }
     }
   },
 
@@ -111,7 +122,9 @@ export default {
 
     async searchFishableWaters () {
       this.search.loading = true
-      const res = await this.$axios.get(`/api/fishable-waters?water_name=${this.search.query}`)
+      /* eslint-disable-next-line */
+      // const res = await this.$axios.get(`/api/fishable-waters?water_name=${this.search.query}`)
+      const res = await this.$axios.get(this.searchUrl)
       this.search.results = res.data
       this.search.loading = false
     }
