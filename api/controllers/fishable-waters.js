@@ -2,12 +2,9 @@ const { db, sql, pgp } = require('../db')
 
 async function getFishableWaters (request, reply) {
   const { query } = request
-  const res = null
 
   if (hasQueryString(query)) {
-    const qf = sql.fishableWaters.search
-    const where = pgp.as.format('WHERE water_name ilike \'%$<water_name:value>%\'', query)
-    return db.manyOrNone(qf, { where })
+    return db.fishableWaters.search(query)
   }
 
   return db.fishableWaters.getAll()

@@ -7,9 +7,9 @@ const routes = [
     method: 'GET',
     url: '/fishable-waters',
     schema: {querystring: {
-        'water_name': {
+        's': {
           type: 'string',
-          description: 'The name of a water body in Nevada'
+          description: 'A search term or phrase for full text search of the fishable waters table'
         }
       }
     },
