@@ -15,7 +15,6 @@ class FishableWatersRepository {
   }
 
   async search({ s }) {
-    s = s.split(',').join(' or ')
     const frmt = this.pgp.as.format(sql.search, { s })
     console.log(JSON.stringify({
       s,
