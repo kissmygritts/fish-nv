@@ -1,5 +1,5 @@
 <template>
-  <l-geo-json :geojson="geojson" :options="options" />
+  <l-geo-json ref="geojson" :geojson="geojson" :options="options" :visible="visible" />
 </template>
 
 <script>
@@ -12,17 +12,39 @@ export default {
       required: true,
       default: true
     },
+    filterIds: {
+      type: Array,
+      required: false,
+      default () { return [] }
+    },
     geojson: {
       type: Object,
       required: true,
       default () { return null }
+    },
+    visible: {
+      type: Boolean,
+      required: true,
+      default: true
     }
   },
 
   computed: {
     options () {
       return {
-        onEachFeature: this.onEachFeature
+        onEachFeature: this.onEachFeature,
+        filter: this.filter
+      }
+    },
+
+    filter () {
+      return (feature) => {
+        if (this.filterIds.length === 0) {
+          /* eslint-disable-next-line */
+          return true
+        }
+        /* eslint-disable-next-line */
+        return this.filterIds.includes[feature.properties.id]
       }
     },
 

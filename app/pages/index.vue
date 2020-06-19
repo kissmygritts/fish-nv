@@ -2,21 +2,24 @@
   <div class="flex h-screen w-screen">
     <main id="map" class="bg-blue-400 flex-grow">
       <client-only>
-        <l-map :center="center" :zoom="zoom">
+        <l-map ref="map" :center="center" :zoom="zoom" @ready="renderGeometry()">
           <l-tile-layer :url="url" />
+          <!-- <geo-json-layer
+            v-if="hasGeometry"
+            ref="geojsonContainer"
+            :geojson="geometry.results"
+            :filter-ids="filterIds"
+            :enable-tooltip="true"
+            :visible="geometry.visible"
+            @click:feature="navigateTo"
+          /> -->
         </l-map>
       </client-only>
-
-      <!-- <geo-json-layer
-        :geojson="fishableWaters.geojson"
-        :enable-tooltip="true"
-        @click:feature="navigateTo"
-      /> -->
     </main>
 
     <aside class="bg-gray-100 w-1/4 flex flex-col px-8 overflow-y-auto">
       <!-- search container -->
-      <search-container @selected="doSomething" />
+      <search-container @selected="searchFishableWaters" />
       <!-- results -->
       <div class="w-full mt-2">
         <div v-if="hasSearchResults">
@@ -46,22 +49,15 @@
 </template>
 
 <script>
+// import L from 'leaflet'
 // import GeoJsonLayer from '@/components/elements/geojson-layer.vue'
-import SearchContainer from '@/components/search-container'
+import SearchContainer from '@/components/search-container.vue'
 
 export default {
   components: {
     // GeoJsonLayer,
     SearchContainer
   },
-
-  // async asyncData ({ $axios }) {
-  //   const res = await $axios.get('/api/geojson/fishable_waters?columns=water_name,id')
-
-  //   return {
-  //     fishableWaters: res.data
-  //   }
-  // },
 
   data () {
     return {
@@ -72,14 +68,38 @@ export default {
         loading: false,
         results: null,
         params: null
+      },
+      geometry: {
+        visible: true,
+        loading: false,
+        results: null
       }
     }
   },
 
   computed: {
+    hasGeometry () {
+      return !!this.geometry.results
+    },
+
     hasSearchResults () {
       return !!this.search.results
+    },
+
+    filterIds () {
+      if (this.hasSearchResults) {
+        return this.search.results.map(m => m.id)
+      } else {
+        return []
+      }
     }
+  },
+
+  updated () {
+    /* eslint-disable-next-line */
+    console.log('INDEX.VUE updated')
+    /* eslint-disable-next-line */
+    console.log(this.$refs)
   },
 
   methods: {
@@ -89,8 +109,7 @@ export default {
       })
     },
 
-    /* eslint-disable-next-line */
-    async doSomething ({ params }) {
+    async searchFishableWaters ({ params }) {
       // set search.params -- probably not needed
       this.search.params = params
 
@@ -109,17 +128,32 @@ export default {
       const res = await this.$axios.get(url)
       this.search.results = res.data
       this.search.loading = false
+
+      // emit event after load?
+      this.$emit('search-done')
+
+      // toggle geojson visible
+      this.geometry.visible = false
+      this.geometry.visible = true
     },
 
-    async searchFishableWaters () {
-      this.search.loading = true
-      /* eslint-disable-next-line */
-      // const res = await this.$axios.get(`/api/fishable-waters?water_name=${this.search.query}`)
-      const res = await this.$axios.get(this.searchUrl)
-      this.search.results = res.data
-      this.search.loading = false
+    async loadGeometry () {
+      this.geometry.loading = true
+      const res = await this.$axios.get('/api/geojson/fishable_waters?columns=water_name,id')
+      this.geometry.results = res.data.geojson
+      this.geometry.loading = false
+    },
+
+    async renderGeometry () {
+      if (!this.hasGeometry) {
+        await this.loadGeometry()
+      }
+
+      const gl = this.$refs.map.$L.geoJson(this.geometry.results)
+      gl.addTo(this.$refs.map.mapObject)
     }
   }
+
 }
 </script>
 
