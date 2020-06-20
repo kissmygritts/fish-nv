@@ -2,18 +2,10 @@
   <div class="flex h-screen w-screen">
     <main id="map" class="bg-blue-400 flex-grow">
       <client-only>
-        <l-map ref="map" :center="center" :zoom="zoom" @ready="renderGeometry()">
-          <l-tile-layer :url="url" />
-          <!-- <geo-json-layer
-            v-if="hasGeometry"
-            ref="geojsonContainer"
-            :geojson="geometry.results"
-            :filter-ids="filterIds"
-            :enable-tooltip="true"
-            :visible="geometry.visible"
-            @click:feature="navigateTo"
-          /> -->
-        </l-map>
+        <fishable-waters-map
+          :geojson="geometry.results"
+          @ready="loadGeometry"
+        />
       </client-only>
     </main>
 
@@ -49,37 +41,33 @@
 </template>
 
 <script>
-// import L from 'leaflet'
-// import GeoJsonLayer from '@/components/elements/geojson-layer.vue'
+import FishableWatersMap from '@/components/fishable-waters-map'
 import SearchContainer from '@/components/search-container.vue'
 
 export default {
   components: {
-    // GeoJsonLayer,
+    FishableWatersMap,
     SearchContainer
   },
 
   data () {
     return {
-      url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      center: [38.64954285997146, -116.77592011899117],
-      zoom: 6,
       search: {
         loading: false,
         results: null,
         params: null
       },
       geometry: {
-        visible: true,
         loading: false,
-        results: null
+        results: {}
       }
     }
   },
 
   computed: {
     hasGeometry () {
-      return !!this.geometry.results
+      // return !!this.geometry.results
+      return Object.keys(this.geometry.results).length > 0
     },
 
     hasSearchResults () {
@@ -93,13 +81,6 @@ export default {
         return []
       }
     }
-  },
-
-  updated () {
-    /* eslint-disable-next-line */
-    console.log('INDEX.VUE updated')
-    /* eslint-disable-next-line */
-    console.log(this.$refs)
   },
 
   methods: {
@@ -132,9 +113,16 @@ export default {
       // emit event after load?
       this.$emit('search-done')
 
-      // toggle geojson visible
-      this.geometry.visible = false
-      this.geometry.visible = true
+      // filter geojson
+      const features = this.geometry.results.features.filter((feature) => {
+        return this.filterIds.includes(feature.properties.id)
+      })
+      const geojson = {
+        type: 'featureCollection',
+        features
+      }
+
+      this.geometry.results = geojson
     },
 
     async loadGeometry () {
@@ -142,15 +130,6 @@ export default {
       const res = await this.$axios.get('/api/geojson/fishable_waters?columns=water_name,id')
       this.geometry.results = res.data.geojson
       this.geometry.loading = false
-    },
-
-    async renderGeometry () {
-      if (!this.hasGeometry) {
-        await this.loadGeometry()
-      }
-
-      const gl = this.$refs.map.$L.geoJson(this.geometry.results)
-      gl.addTo(this.$refs.map.mapObject)
     }
   }
 
