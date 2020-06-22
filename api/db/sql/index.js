@@ -5,6 +5,7 @@ module.exports = {
   fishableWaters: {
     getAll: sql('fishable-waters/get-all.sql'),
     getById: sql('fishable-waters/get-by-id.sql'),
+    search: sql('fishable-waters/search.sql')
   },
   spatial: {
     getGeoJson: sql('spatial/geojson.sql')

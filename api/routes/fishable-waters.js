@@ -6,6 +6,13 @@ const routes = [
   {
     method: 'GET',
     url: '/fishable-waters',
+    schema: {querystring: {
+        's': {
+          type: 'string',
+          description: 'A search term or phrase for full text search of the fishable waters table'
+        }
+      }
+    },
     handler: getFishableWaters
   },
   // GET /fishable-waters/:id
