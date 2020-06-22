@@ -3,7 +3,7 @@
     <main id="map" class="bg-blue-400 flex-grow">
       <client-only>
         <fishable-waters-map
-          :geojson="geometry.results"
+          :geojson="geojson"
           @ready="loadGeometry"
         />
       </client-only>
@@ -80,6 +80,26 @@ export default {
       } else {
         return []
       }
+    },
+
+    geojson () {
+      if (!this.hasGeometry) {
+        return {}
+      }
+
+      if (!this.hasSearchResults) {
+        return this.geometry.results
+      }
+
+      const features = this.geometry.results.features.filter((feature) => {
+        return this.filterIds.includes(feature.properties.id)
+      })
+      const geojson = {
+        type: 'featureCollection',
+        features
+      }
+
+      return geojson
     }
   },
 
@@ -91,38 +111,32 @@ export default {
     },
 
     async searchFishableWaters ({ params }) {
+      this.search.loading = true
+
       // set search.params -- probably not needed
       this.search.params = params
 
-      // construct the query
-      const qs = new URLSearchParams()
+      // if params, do the thing
       if (params.s) {
+        // init query string object
+        const qs = new URLSearchParams()
+
         qs.append('s', params.s)
+        const url = `/api/fishable-waters?${qs.toString()}`
+
+        /* eslint-disable-next-line */
+        console.log(url)
+
+        // start query to search
+        const res = await this.$axios.get(url)
+        this.search.results = res.data
+      } else {
+        // else, no params or params are null, set search results = null
+        this.search.results = null
+        this.search.params = null
       }
-      const url = `/api/fishable-waters?${qs.toString()}`
 
-      /* eslint-disable-next-line */
-      console.log(url)
-
-      // start query to search
-      this.search.loading = true
-      const res = await this.$axios.get(url)
-      this.search.results = res.data
       this.search.loading = false
-
-      // emit event after load?
-      this.$emit('search-done')
-
-      // filter geojson
-      const features = this.geometry.results.features.filter((feature) => {
-        return this.filterIds.includes(feature.properties.id)
-      })
-      const geojson = {
-        type: 'featureCollection',
-        features
-      }
-
-      this.geometry.results = geojson
     },
 
     async loadGeometry () {
