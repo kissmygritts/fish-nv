@@ -9,7 +9,7 @@
       </client-only>
     </main>
 
-    <aside class="bg-gray-100 w-1/4 flex flex-col px-8 overflow-y-auto">
+    <aside class="bg-gray-100 w-1/4 flex flex-col px-4 overflow-y-auto">
       <!-- search container -->
       <search-container @selected="searchFishableWaters" />
       <!-- results -->
@@ -19,20 +19,22 @@
             v-for="water in search.results"
             :key="water.id"
           >
-            <div
-              class="flex items-center justify-between p-3 w-full bg-white border-b-2 border-gray-100 last:border-b-0 rounded-none last:border-b-full"
-            >
-              <div>
-                <h2 class="text-gray-800 text-lg">
-                  {{ water.water_name }}
-                </h2>
+            <nuxt-link :to="{ path: 'fishable-waters', params: { id: water.id } }" no-prefetch>
+              <div
+                class="flex items-center justify-between p-3 w-full bg-white border-b-2 border-gray-100 last:border-b-0 rounded-none last:border-b-full"
+              >
+                <div>
+                  <h2 class="text-gray-800 text-lg">
+                    {{ water.water_name }}
+                  </h2>
+                </div>
+                <div>
+                  <h3 class="text-gray-500 font-light tracking-wide">
+                    {{ water.label }}
+                  </h3>
+                </div>
               </div>
-              <div>
-                <h3 class="text-gray-500 font-light tracking-wide">
-                  {{ water.label }}
-                </h3>
-              </div>
-            </div>
+            </nuxt-link>
           </div>
         </div>
       </div>
