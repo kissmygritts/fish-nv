@@ -43,6 +43,7 @@ export default {
 
     onEachFeature () {
       return (feature, layer) => {
+        // add hover tooltip
         layer.bindTooltip(
           feature.properties.water_name,
           {
@@ -50,6 +51,15 @@ export default {
             sticky: true
           }
         )
+
+        // add on click navigation
+        layer.on({
+          click: () => {
+            this.$router.push({
+              path: `/fishable-waters/${feature.properties.id}`
+            })
+          }
+        })
       }
     },
 
@@ -62,7 +72,6 @@ export default {
 
   methods: {
     ready () {
-      console.log('im fucking ready!!!!!!!!!!!!!!')
       this.$emit('ready')
     }
   }
