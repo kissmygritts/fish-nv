@@ -8,7 +8,8 @@ module.exports = {
     search: sql('fishable-waters/search.sql')
   },
   fishEntries: {
-    getAll: sql('fish-entries/get-all.sql')
+    getAll: sql('fish-entries/get-all.sql'),
+    count: sql('fish-entries/count.sql')
   },
   spatial: {
     getGeoJson: sql('spatial/geojson.sql')

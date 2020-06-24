@@ -1,4 +1,4 @@
-const { getFishableWaters, getFishableWatersById } = require('../controllers/fishable-waters')
+const { getFishableWaters, getFishableWatersById } = require('../controllers/fishable-waters.js')
 
 // declare routes
 const routes = [

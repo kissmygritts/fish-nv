@@ -21,6 +21,8 @@ const schema = {
 
 async function getFishEntries (request, reply) {
   const { query } = request
+  query.water_id = request.params.id
+  
   console.log(JSON.stringify({ query }))
 
   // parse query into parts
@@ -50,7 +52,7 @@ async function getFishEntries (request, reply) {
 
 // register routes
 module.exports = function (fastify, opt, next) {
-  fastify.get('/fish-entries', { schema }, getFishEntries)
+  fastify.get('/fishable-waters/:id/fish-entries', { schema }, getFishEntries)
   next()
 }
 

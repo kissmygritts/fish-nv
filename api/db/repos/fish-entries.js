@@ -21,15 +21,17 @@ class FishEntriesRepository {
     const paginationSql = pgp.as.format('limit $<limit> offset $<offset>', pagination)
     
     // 4. format sql together
-    const query = pgp.as.format(sql.getAll, {
+    const records = await this.db.manyOrNone(sql.getAll, {
       where: filtersSql,
       order: orderSql,
       pagination: paginationSql
     })
+    const totalRecords = await this.db.one(sql.count, { where: filtersSql })
 
-    console.log(JSON.stringify({ query }))
-
-    return this.db.manyOrNone(query)
+    return {
+      data: records,
+      totalRecords: Number(totalRecords.count)
+    }
   }
 }
 
