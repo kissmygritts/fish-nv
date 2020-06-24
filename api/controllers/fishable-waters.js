@@ -12,7 +12,6 @@ async function getFishableWaters (request, reply) {
 
 async function getFishableWatersById (request, reply) {
   const { id } = request.params
-  console.log(id)
   return db.fishableWaters.getById({ id })
 }
 

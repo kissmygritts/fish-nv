@@ -7,9 +7,12 @@ module.exports = {
     getById: sql('fishable-waters/get-by-id.sql'),
     search: sql('fishable-waters/search.sql')
   },
+  fishEntries: {
+    getAll: sql('fish-entries/get-all.sql')
+  },
   spatial: {
     getGeoJson: sql('spatial/geojson.sql')
-  }
+  },
 }
 
 function sql(file) {
