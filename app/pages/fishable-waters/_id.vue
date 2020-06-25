@@ -54,10 +54,12 @@
           <vue-good-table
             mode="remote"
             :pagination-options="paginationOptions"
+            :sort-options="{ enabled: false }"
             :columns="columns"
             :rows="rows"
             :total-rows="fishEntries.totalRecords"
             @on-page-change="onPageChange"
+            @on-per-page-change="onPerPageChange"
           />
         </div>
       </div>
@@ -179,9 +181,18 @@ export default {
         }))
     },
 
-    // columns () {
-    //   return Object.keys(this.rows)
-    // },
+    querystring () {
+      let querystring = new URLSearchParams()
+
+      // default ordering, don't change this for now
+      querystring.append('order', 'species')
+      querystring.append('order', 'desc.fish_weight')
+
+      querystring.append('page', this.query.page || 1)
+      querystring.append('per_page', this.query.perPage || 25)
+
+      return querystring.toString()
+    },
 
     hasFishEntries () {
       return this.fishEntries.data.length > 0
@@ -210,8 +221,13 @@ export default {
       this.loadTable()
     },
 
+    onPerPageChange (params) {
+      this.updateQuery({ perPage: params.currentPerPage })
+      this.loadTable()
+    },
+
     async loadTable () {
-      const url = `${this.url}/fish-entries?order=species&order=desc.fish_weight&page=${this.query.page}&per_page=${this.query.perPage}`
+      const url = `${this.url}/fish-entries?${this.querystring}`
       console.log(url)
       const data = await this.$axios.$get(url)
       this.fishEntries = data
