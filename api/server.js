@@ -12,9 +12,6 @@ fastify.register(require('fastify-cors'), {
 fastify.register(autoload, {
   dir: path.join(__dirname, 'routes')
 })
-// routes.forEach((route) => {
-//   fastify.route(route)
-// })
 
 // server startup function
 const start = async () => {

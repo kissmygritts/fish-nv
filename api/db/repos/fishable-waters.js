@@ -23,6 +23,10 @@ class FishableWatersRepository {
 
     return this.db.manyOrNone(frmt)
   }
+
+  async getWaterRecords ({ id }) {
+    return this.db.manyOrNone(sql.waterRecords, { id })
+  }
 }
 
 module.exports = FishableWatersRepository
