@@ -19,3 +19,4 @@ FROM fish_entries
     AND fish_entries.water_id = fr.water_id
     AND fish_entries.fish_weight = fr.fish_weight
   JOIN species ON fish_entries.species_id = species.id
+ORDER BY species.species
