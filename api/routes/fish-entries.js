@@ -1,5 +1,6 @@
 const { db } = require('../db')
 const { parse } = require('../utils/sqlqs.js')
+const { pickDefined } = require('../utils/pick.js')
 
 // declare route schema
 // define the querystring schema
@@ -27,7 +28,7 @@ async function getFishEntries (request, reply) {
 
   // parse query into parts
   // 1. query parameters
-  const filters = { angler_name, water_id } = query
+  const filters = pickDefined(query, ['water_id', 'angler_name'])
   
   // const where = Object.keys(filters).length > 0 ? parse(filters) : []
 
