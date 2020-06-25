@@ -1,3 +1,4 @@
+<!-- eslint-disble -->
 <template>
   <div class="text-gray-900">
     <header class="px-2 py-6 md:px-4 md:py-8 lg:px-8 container mx-auto">
@@ -35,7 +36,7 @@
               Water Records
             </h2>
             <stat-container
-              :water-records="getWaterRecords"
+              :water-records="waterRecords"
               class="pt-10 pb-5"
             />
           </div>
@@ -102,54 +103,31 @@ export default {
   async asyncData ({ params, $axios }) {
     const url = `/api/fishable-waters/${params.id}`
 
-    const res = await $axios.get(url)
+    const fishableWater = await $axios.$get(url)
+    const fishEntries = await $axios.$get(`${url}/fish-entries?order=species&order=desc.fish_weight`)
+    const waterRecords = await $axios.$get(`${url}/water-records`)
+
     return {
-      fishableWater: res.data
+      fishableWater,
+      fishEntries,
+      waterRecords
     }
   },
 
   computed: {
-    getWaterRecords () {
-      const fishArray = this.fishableWater.fish_entries
-
-      const fishObj = fishArray.reduce((acc, obj) => {
-        // I borrowed this function from MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
-        const key = obj.species
-
-        if (!acc[key]) {
-          acc[key] = { weight: 0 }
-        }
-
-        if (obj.fish_weight && obj.fish_weight > acc[key].weight) {
-          acc[key] = obj
-        }
-
-        return acc
-      }, {})
-
-      return Object.keys(fishObj).map(m => ({
-        species: m,
-        weight: fishObj[m].fish_weight,
-        pounds: fishObj[m].pounds,
-        ounces: fishObj[m].ounces
-      }))
-    },
-
     fishTable () {
-      return this.fishableWater.fish_entries
+      return this.fishEntries.data
         .map(m => ({
           'angler name': m.angler_name,
           species: m.species,
           pounds: m.pounds,
           ounces: m.ounces,
-          'angler city': m.angler_city,
           'angler state': m.angler_state
         }))
-        .slice(0, 25)
     },
 
     hasFishEntries () {
-      return !!this.fishableWater.fish_entries
+      return this.fishEntries.data.length > 0
     },
 
     parsedGeoJson () {
