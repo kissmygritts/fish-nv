@@ -47,9 +47,17 @@
             All Fish Entries
           </h2>
 
-          <simple-table
+          <!-- <simple-table
             :table-data="fishTable"
             class="pt-10 pb-5"
+          /> -->
+          <vue-good-table
+            mode="remote"
+            :pagination-options="paginationOptions"
+            :columns="columns"
+            :rows="rows"
+            :total-rows="fishEntries.totalRecords"
+            @on-page-change="onPageChange"
           />
         </div>
       </div>
@@ -87,17 +95,21 @@
 </template>
 
 <script>
+/* eslint-disable */
+import { VueGoodTable } from 'vue-good-table'
+import 'vue-good-table/dist/vue-good-table.css'
 import GeoJsonMap from '@/components/geojson-map.vue'
-import SimpleTable from '@/components/elements/simple-table.vue'
+// import SimpleTable from '@/components/elements/simple-table.vue'
 import StatContainer from '@/components/elements/stat-container.vue'
 import TwTag from '@/components/elements/tw-tag.vue'
 
 export default {
   components: {
     GeoJsonMap,
-    SimpleTable,
+    // SimpleTable,
     StatContainer,
-    TwTag
+    TwTag,
+    VueGoodTable
   },
 
   async asyncData ({ params, $axios }) {
@@ -110,21 +122,66 @@ export default {
     return {
       fishableWater,
       fishEntries,
+      url,
       waterRecords
     }
   },
 
+  data () {
+    return {
+      columns: [
+        {
+          label: 'Angler Name',
+          field: 'angler_name'
+        }, {
+          label: 'Species',
+          field: 'species'
+        }, {
+          label: 'Pounds',
+          field: 'pounds',
+          type: 'number'
+        }, {
+          label: 'Ounces',
+          field: 'ounces',
+          type: 'number'
+        }, {
+          label: 'Angler State',
+          field: 'angler_state'
+        }
+      ],
+      paginationOptions: {
+        enabled: true,
+        perPage: 25,
+        perPageDropdown: [15, 25, 50, 75],
+        dropdownAllowAll: false
+      },
+      query: {
+        columnFilters: {},
+        sort: {
+          field: '',
+          type: ''
+        },
+        page: 1,
+        perPage: 25
+      }
+    }
+  },
+
   computed: {
-    fishTable () {
+    rows () {
       return this.fishEntries.data
         .map(m => ({
-          'angler name': m.angler_name,
+          angler_name: m.angler_name,
           species: m.species,
           pounds: m.pounds,
           ounces: m.ounces,
-          'angler state': m.angler_state
+          angler_state: m.angler_state
         }))
     },
+
+    // columns () {
+    //   return Object.keys(this.rows)
+    // },
 
     hasFishEntries () {
       return this.fishEntries.data.length > 0
@@ -140,6 +197,24 @@ export default {
         `${this.fishableWater.county} county`,
         ...this.fishableWater.species
       ]
+    }
+  },
+
+  methods: {
+    updateQuery (props) {
+      this.query = Object.assign({}, this.query, props)
+    },
+
+    onPageChange (params) {
+      this.updateQuery({ page: params.currentPage })
+      this.loadTable()
+    },
+
+    async loadTable () {
+      const url = `${this.url}/fish-entries?order=species&order=desc.fish_weight&page=${this.query.page}&per_page=${this.query.perPage}`
+      console.log(url)
+      const data = await this.$axios.$get(url)
+      this.fishEntries = data
     }
   }
 }
