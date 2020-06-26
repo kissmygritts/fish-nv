@@ -19,7 +19,7 @@
             v-for="water in search.results"
             :key="water.id"
           >
-            <nuxt-link :to="{ path: 'fishable-waters', params: { id: water.id } }" no-prefetch>
+            <nuxt-link :to="{ name: 'fishable-waters-id', params: { id: water.id } }" no-prefetch>
               <div
                 class="flex items-center justify-between p-3 w-full bg-white border-b-2 border-gray-100 last:border-b-0 rounded-none last:border-b-full"
               >
