@@ -5,7 +5,16 @@
     :zoom="zoom"
     @ready="ready"
   >
-    <l-tile-layer :url="url" />
+    <l-control-layers position="topright" />
+    <l-tile-layer
+      v-for="tile in tiles"
+      :key="tile.name"
+      :name="tile.name"
+      :visible="tile.visible"
+      :url="tile.url"
+      layer-type="base"
+    />
+    <l-control-scale position="bottomleft" :imperial="true" :metric="false" />
     <l-geo-json
       v-if="hasGeoJson"
       ref="geojson"
@@ -30,7 +39,21 @@ export default {
 
   data () {
     return {
-      url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      tiles: [
+        {
+          name: 'Default',
+          visible: true,
+          url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{s}.png'
+        }, {
+          name: 'Satelitte',
+          visible: false,
+          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+        }, {
+          name: 'Topo',
+          visible: false,
+          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
+        }
+      ],
       center: [38.64954285997146, -116.77592011899117],
       zoom: 6
     }
