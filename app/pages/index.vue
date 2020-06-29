@@ -1,6 +1,6 @@
 <template>
-  <div class="flex h-screen w-screen">
-    <main id="map" class="bg-blue-400 flex-grow">
+  <div class="flex h-screen w-screen text-gray-700">
+    <main id="map" class="flex-grow">
       <client-only>
         <fishable-waters-map
           :geojson="geojson"
@@ -15,6 +15,9 @@
       <!-- results -->
       <div class="w-full mt-2">
         <div v-if="hasSearchResults">
+          <p class="p-2 text-lg">
+            Found {{ search.results.length }} Fishable Waters
+          </p>
           <div
             v-for="water in search.results"
             :key="water.id"
