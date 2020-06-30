@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'TwTag',
+  name: 'TailsTag',
   props: {
     text: {
       type: String,

@@ -9,7 +9,7 @@
         </span>
       </h1>
       <div>
-        <tw-tag
+        <tails-tag
           v-for="(tag, index) in tags"
           :key="index"
           :text="tag"
@@ -83,7 +83,7 @@
             </p>
             <div class="mt-6">
               <a
-                href="#"
+                href="https://nevada.licensing.kalkomey.com/licenses"
                 class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
                 Buy a fishing license
@@ -101,16 +101,14 @@
 import { VueGoodTable } from 'vue-good-table'
 import 'vue-good-table/dist/vue-good-table.css'
 import GeoJsonMap from '@/components/geojson-map.vue'
-// import SimpleTable from '@/components/elements/simple-table.vue'
 import StatContainer from '@/components/elements/stat-container.vue'
-import TwTag from '@/components/elements/tw-tag.vue'
+import TailsTag from '@/components/elements/tails-tag.vue'
 
 export default {
   components: {
     GeoJsonMap,
-    // SimpleTable,
     StatContainer,
-    TwTag,
+    TailsTag,
     VueGoodTable
   },
 

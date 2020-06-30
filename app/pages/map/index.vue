@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import FishableWatersMap from '@/components/fishable-waters-map'
+import FishableWatersMap from '@/components/fishable-waters-map.vue'
 import SearchContainer from '@/components/search-container.vue'
 
 export default {
