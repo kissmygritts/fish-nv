@@ -125,7 +125,6 @@ export default {
       if (params.s) {
         // init query string object
         const qs = new URLSearchParams()
-
         qs.append('s', params.s)
         const url = `/api/fishable-waters?${qs.toString()}`
 

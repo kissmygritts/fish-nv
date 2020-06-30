@@ -1,6 +1,6 @@
 # added by kissmygritts
 data/
-
+ecosystem.config.js
 
 # Created by https://www.gitignore.io/api/vue,node,nuxt,vuejs,macos,nuxtjs,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=vue,node,nuxt,vuejs,macos,nuxtjs,visualstudiocode
