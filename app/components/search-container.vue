@@ -7,7 +7,7 @@
       class="text-sm text-orange-700 underline cursor-pointer"
       @click="clearFilters"
     >
-      Clear Fitlers
+      Clear Filters
     </p>
     <!-- species input -->
     <div class="mt-2 py-2">
