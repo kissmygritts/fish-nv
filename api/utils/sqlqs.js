@@ -1,3 +1,4 @@
+// parse filter params
 const safeText = text => text.replace(/'/g, "''")
 
 const wrapText = text => `'` + text + `'`
@@ -55,8 +56,32 @@ const sqlize = parsed => {
 
 const where = query => sqlize(parse(query))
 
+// parse order params
+function splitOrderString(str) {
+  const split = str.split('.')
+  return {
+    field: split[1],
+    type: split[0]
+  }
+}
+
+function parseOrderString(str) {
+  return str.includes('.')
+    ? splitOrderString(str)
+    : { field: str, type: 'asc' }
+}
+
+function parseOrder(order) {
+  return order
+    ? Array.isArray(order)
+      ? order.map(parseOrderString)
+      : [parseOrderString(order)]
+    : []
+}
+
 module.exports = {
   parse,
   sqlize,
-  where
+  where,
+  parseOrder
 }
