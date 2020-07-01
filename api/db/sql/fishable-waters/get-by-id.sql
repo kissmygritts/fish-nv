@@ -8,7 +8,7 @@ SELECT
   fw.region,
   fw.county,
   species.species_arr AS species,
-  st_asGeoJSON(geom, 5) as geojson
+  st_asGeoJSON(geom, 5)::json AS geojson
 FROM fishable_waters AS fw
   JOIN (
     SELECT
