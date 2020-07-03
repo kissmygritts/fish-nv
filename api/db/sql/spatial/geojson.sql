@@ -1,11 +1,11 @@
 SELECT
   json_build_object(
     'type', 'featureCollection',
-    'features', json_agg(st_asgeojson(sq)::json)
-  ) AS geojson
+    'features', json_agg(st_asGeoJSON(sq)::json)
+  )::json AS geojson
 FROM (
   SELECT
-    geom
     $<columns:raw>
   FROM $<table:name>
+  LIMIT 5
 ) AS sq

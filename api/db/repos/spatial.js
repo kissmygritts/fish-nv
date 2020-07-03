@@ -6,9 +6,22 @@ class SpatialRepository {
     this.pgp = pgp
   }
 
-  async getGeojson(params) {
-    console.log(params)
-    return params
+  async getGeoJSON({ table, columns }) {
+    // format columns
+    const columnNames = [ 'geom', ...columns ]
+      .map(this.pgp.as.name)
+      .join(', ')
+    
+      const query = this.pgp.as.format(sql.getGeoJSON, {
+      table,
+      columns: columnNames
+    })
+    console.log(JSON.stringify({ query }))
+    
+    return this.db.oneOrNone(sql.getGeoJSON, {
+      table,
+      columns: columnNames
+    })
   }
 }
 

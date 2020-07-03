@@ -2,40 +2,56 @@ const as = require('pg-promise/lib/formatting').as
 const { db, sql } = require('../db')
 
 // declare route schema
-const schema = {
-  description: 'Return table as GeoJSON',
-  params: {
+const params = {
+  type: 'object',
+  properties: {
     table: {
       type: 'string',
-      description: 'The name of the table of view'
-    }
-  },
-  querystring: {
-    columns: {
-      type: 'string',
-      description: 'Columns to return as GeoJSON properties.'
+      description: 'The name of the table to return as GeoJSON'
     }
   }
 }
 
+const querystring = {
+  type: 'object',
+  properties: {
+    columns: {
+      type: 'string',
+      description: 'Columns to return as properties for the GeoJSON'
+    }
+  }
+}
+
+const response = {
+  200: {
+    type: 'object',
+    properties: {
+      type: { type: 'string' },
+      features: { type: 'array' }
+    }
+  }
+}
+
+const schema = {
+  description: 'Return table as GeoJSON',
+  params,
+  querystring,
+  response
+}
+
 // route logic (business logic?)
-async function geojsonHandler (req, reply) {
-  // TODO: pull into the spatial repo?
-  // construct query object
-  const q = {
-    ...req.params,
-    columns: req.query.columns
-      ? req.query.columns
-        .split(',')
-        .map(as.name)
-        .concat(' ')
-        .reverse()
-        .join(', ')
-      : ''
+async function geojsonHandler ({ params, query }, reply) {
+  // format columns as an array
+  const columns = query.columns
+    ? query.columns.split(',')
+    : []
+  
+  const queryParams = {
+    table: params.table,
+    columns
   }
 
-  // make call to the database
-  return db.oneOrNone(sql.spatial.getGeoJson, q)
+  return db.spatial.getGeoJSON(queryParams)
 }
 
 module.exports = function(fastify, opt, next) {
