@@ -26,9 +26,11 @@ const response = {
   200: {
     type: 'object',
     properties: {
-      type: { type: 'string' },
-      features: { type: 'array' }
-    }
+      type: { type: 'string' }
+    },
+    // additional props aren't validated by fastify
+    // TODO: add additional props: features, geometry, coordinates...
+    additionalProperties: true
   }
 }
 

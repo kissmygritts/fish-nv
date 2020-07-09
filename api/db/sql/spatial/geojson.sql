@@ -7,5 +7,4 @@ FROM (
   SELECT
     $<columns:raw>
   FROM $<table:name>
-  LIMIT 5
 ) AS sq
