@@ -21,7 +21,7 @@
     <!-- map of the fishable water -->
     <div id="map" class="w-full">
       <geo-json-map
-        :geojson="parsedGeoJson"
+        :geojson="fishableWater.geojson"
         class="w-full"
       />
     </div>
@@ -194,10 +194,6 @@ export default {
 
     hasFishEntries () {
       return this.fishEntries.data.length > 0
-    },
-
-    parsedGeoJson () {
-      return JSON.parse(this.fishableWater.geojson)
     },
 
     tags () {
