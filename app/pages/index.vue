@@ -62,8 +62,8 @@
 
     <!-- FAQ section -->
     <section id="FAQ" class="text-gray-700 body-font">
-      <div class="container px-5 py-24 mx-auto">
-        <div class="text-center mb-20">
+      <div class="container px-5 lg:px-48 xl:px-64 py-24 mx-auto">
+        <div class="text-center mb-12">
           <h2 class="text-2xl font-medium text-center title-font text-gray-800 mb-4">
             The Fish NV Map
           </h2>
@@ -74,14 +74,14 @@
           </p>
         </div>
         <!-- FAQs -->
-        <div class="flex flex-wrap lg:w-45 sm:mx-auto sm:mb-2 -mx-2">
+        <div class="flex flex-wrap sm:mx-auto sm:mb-2 -mx-2">
           <!-- first -->
           <div class="p-2 w-full">
             <div class="bg-gray-200 rounded-sm p-4 h-full items-center">
               <h3 class="font-semibold tracking-wide">
                 What is a fishable water?
               </h3>
-              <p class="mt-2">
+              <p class="mt-2 pl-4">
                 NDOW fisheries biologist classify fishable waters within their respective areas.
                 Not every stream, creek, or pond is considered a fishable water. Some of these
                 don't contain any fish. Or they are ephemeral. Occasionally there is a mismatch
@@ -96,10 +96,10 @@
               <h3 class="font-semibold tracking-wide">
                 What is a trophy fish?
               </h3>
-              <p class="mt-2">
+              <p class="mt-2 pl-4">
                 Potential trophy fish can be classified into a few separate categories (listed below).
               </p>
-              <ul class="mt-2 list-inside list-disc">
+              <ul class="mt-2 list-inside list-disc pl-4">
                 <li class="mt-1">
                   <span class="font-medium">Trophy Fish:</span> a trophy fish is a fish that meets the
                   minimum trophy fish weight for the respective species. For instance, the minimum
@@ -132,18 +132,18 @@
               <h3 class="font-semibold tracking-wide">
                 About the Data
               </h3>
-              <p class="mt-2">
+              <p class="mt-2 pl-4">
                 The data for this application comes from two sources maintained by the
                 Nevada Department of Wildife: the Trophy Fish Database, and the Fishable
                 Waters Database.
               </p>
-              <p class="mt-2">
+              <p class="mt-2 pl-4">
                 The Fishable Waters Database is used to generate the Nevada Fishing Guide every year.
                 It contains a listing of every fishable water in Nevada as well as which species can
                 be caught in that water. The fish guide is available at many local offices or downloaded
                 from here.
               </p>
-              <p class="mt-2">
+              <p class="mt-2 pl-4">
                 The Trophy Fish Database contains user submitted fish data. Nevada fishermen and women
                 can submit fish records to NDOW for inclusion in an annual Trophy Fish Book generated
                 by the department. This book isn't limited to trophy fish.

@@ -16,6 +16,14 @@
           class="mr-2 rounded capitalize"
         />
       </div>
+      <div class="pt-2">
+        <nuxt-link
+          to="/map"
+          class="text-blue-700 underline"
+        >
+          &larr; Back To Map
+        </nuxt-link>
+      </div>
     </header>
 
     <!-- map of the fishable water -->
@@ -32,7 +40,7 @@
       <div v-if="hasFishEntries">
         <div class="bg-gray-100 text-gray-700">
           <div class="w-100 pt-12 container px-5 py-12 mx-auto">
-            <h2 class="text-lg tracking-wide font-light text-left md:text-center">
+            <h2 class="text-2xl tracking-wide font-hairline text-left md:text-center">
               Water Records
             </h2>
             <stat-container
@@ -43,15 +51,12 @@
         </div>
 
         <div class="w-100 text-center pt-16 container mx-auto">
-          <h2 class="text-lg tracking-wide font-light text-left md:text-center px-5">
+          <h2 class="text-2xl tracking-wide font-hairline text-left md:text-center px-5">
             All Fish Entries
           </h2>
 
-          <!-- <simple-table
-            :table-data="fishTable"
-            class="pt-10 pb-5"
-          /> -->
           <vue-good-table
+            class="pt-10"
             mode="remote"
             :pagination-options="paginationOptions"
             :sort-options="{ enabled: false }"
