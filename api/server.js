@@ -3,10 +3,11 @@ const fastify = require('fastify')({ logger: true })
 const autoload = require('fastify-autoload')
 const routes = require('./routes/fishable-waters')
 
-// register fastify middleware
+// fastify cors
 fastify.register(require('fastify-cors'), {
   origin: '*'
 })
+
 
 // register routes
 fastify.register(autoload, {
