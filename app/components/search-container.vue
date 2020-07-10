@@ -160,7 +160,7 @@ export default {
           ? this.species.selected.join(' or ')
           : this.species.selected
         : ''
-      const waterString = this.waterType.selected ?? ''
+      const waterString = this.waterType.selected || ''
 
       const s = [speciesString, waterString]
         .filter(str => str !== '')
