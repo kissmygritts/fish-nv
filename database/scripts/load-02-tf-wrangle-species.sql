@@ -146,3 +146,43 @@ FROM (
   WHERE tf_db_name = 'northern pike'
 ) AS sq
 WHERE etl.fish_entries.species = 'Pike, Northern*';
+
+/* INSERT SPECIES DESCRIPTIONS */
+-- update scientific name
+UPDATE public.species
+SET scientific_name = sq.scientific_name
+FROM public.species AS t 
+JOIN (
+  SELECT
+    species.id,
+    species_descriptions.scientific_name
+  FROM species
+  JOIN etl.species_descriptions ON species.species = species_descriptions.species
+) as sq ON t.id = sq.id
+WHERE public.species.id = sq.id;
+
+-- update description
+UPDATE public.species
+SET description = sq.description
+FROM public.species AS t 
+JOIN (
+  SELECT
+    species.id,
+    species_descriptions.description
+  FROM species
+  JOIN etl.species_descriptions ON species.species = species_descriptions.species
+) as sq ON t.id = sq.id
+WHERE public.species.id = sq.id;
+
+-- update other names
+UPDATE public.species
+SET other_names = sq.other_names
+FROM public.species AS t 
+JOIN (
+  SELECT
+    species.id,
+    species_descriptions.other_names
+  FROM species
+  JOIN etl.species_descriptions ON species.species = species_descriptions.species
+) as sq ON t.id = sq.id
+WHERE public.species.id = sq.id;
