@@ -61,6 +61,7 @@ CREATE TABLE public.species (
   species text NOT NULL,
   abbr text,
   scientific_name text,
+  min_trophy_weight numeric,
   description text,
   other_names text
 );
