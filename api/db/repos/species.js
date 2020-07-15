@@ -13,6 +13,10 @@ class SpeciesRepository {
   async getById ({ id }) {
     return this.db.oneOrNone(sql.getById, { id })
   }
+
+  async getWaterBodies ({ id }) {
+    return this.db.one(sql.getWaterBodies, { id })
+  }
 }
 
 module.exports = SpeciesRepository

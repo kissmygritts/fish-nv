@@ -17,7 +17,8 @@ module.exports = {
   },
   species: {
     getAll: sql('species/get-all.sql'),
-    getById: sql('species/get-by-id.sql')
+    getById: sql('species/get-by-id.sql'),
+    getWaterBodies: sql('species/water-bodies.sql')
   }
 }
 
