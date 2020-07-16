@@ -65,8 +65,14 @@
       <!-- actual table -->
       <div class="article__table--bleed mt-8">
         <vue-good-table
+          mode="remote"
           :columns="columns"
           :rows="rows"
+          :pagination-options="paginationOptions"
+          :sort-options="{ enabled: false }"
+          :total-rows="fishEntries.totalRecords"
+          @on-page-change="onPageChange"
+          @on-per-page-change="onPerPageChange"
         />
       </div>
     </div>
@@ -74,7 +80,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 import { VueGoodTable } from 'vue-good-table'
 import 'vue-good-table/dist/vue-good-table.css'
 import GeoJsonMap from '@/components/geojson-map.vue'
@@ -89,13 +94,14 @@ export default {
     const url = `/api/species/${params.id}`
 
     const species = await $axios.$get(url)
-    const fishEntries = await $axios.$get(`${url}/fish-entries?order=desc.fish_weight`)
+    const fishEntries = await $axios.$get(`${url}/fish-entries?order=desc.fish_weight&&page=1&per_page=25`)
     const waterBodies = await $axios.$get(`${url}/water-bodies`)
 
     return {
       species,
       fishEntries,
-      waterBodies
+      waterBodies,
+      url
     }
   },
 
@@ -112,7 +118,22 @@ export default {
           label: 'Ounces',
           field: 'ounces'
         }
-      ]
+      ],
+      paginationOptions: {
+        enabled: true,
+        perPage: 15,
+        perPageDropdown: [15, 25, 50, 75],
+        dropdownAllowAll: false
+      },
+      query: {
+        columnFilters: {},
+        sort: {
+          field: '',
+          type: ''
+        },
+        page: 1,
+        perPage: 25
+      }
     }
   },
 
@@ -124,19 +145,49 @@ export default {
           pounds: m.pounds,
           ounces: m.ounces
         }))
+    },
+
+    querystring () {
+      const querystring = new URLSearchParams()
+
+      // default ordering, don't change this for now
+      querystring.append('order', 'desc.fish_weight')
+
+      querystring.append('page', this.query.page || 1)
+      querystring.append('per_page', this.query.perPage || 25)
+
+      return querystring.toString()
+    }
+  },
+
+  methods: {
+    updateQuery (props) {
+      this.query = Object.assign({}, this.query, props)
+    },
+
+    onPageChange (params) {
+      this.updateQuery({ page: params.currentPage })
+      this.loadTable()
+    },
+
+    onPerPageChange (params) {
+      this.updateQuery({ perPage: params.currentPerPage })
+      this.loadTable()
+    },
+
+    async loadTable () {
+      const url = `${this.url}/fish-entries?${this.querystring}`
+      const data = await this.$axios.$get(url)
+      this.fishEntries = data
     }
   }
 }
 </script>
 
 <style scoped>
-#map {
-  height: 50vh;
-}
-
 .article {
   display: grid;
-  grid-template-columns: 
+  grid-template-columns:
     [full-start] minmax(1em, 1fr)
     [bleed-start] minmax(1em, 1fr)
     [main-start] minmax(0, 40em)
@@ -165,7 +216,7 @@ export default {
 
 .article__map--bleed {
   grid-column: bleed;
-  height: 50vh;
+  height: 500px;
 }
 
 .article__table--bleed {
