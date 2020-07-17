@@ -28,16 +28,19 @@ const querystring = {
 const fishEntryResponse = {
   type: 'object',
   properties: {
+    id: { type: 'string' },
+    species_id: { type: 'string' },
     species: { type: 'string' },
     water_id: { type: 'string' },
+    water_name: { type: 'string' },
     date_caught: { type: 'string' },
     pounds: { type: 'integer' },
     ounces: { type: 'integer' },
     fish_weight: { type: 'integer' },
     fish_length: { type: 'number' },
     angler_name: { type: 'string' },
-    angler_city: { type: 'string' },
-    angler_state: { type: 'string' }
+    angler_state: { type: 'string' },
+    trophy_classification: { type: 'string' }
   }
 }
 
