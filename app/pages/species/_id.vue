@@ -1,9 +1,9 @@
 <template>
   <div class="bg-gray-100 text-gray-900 pb-24">
-    <div class="article">
+    <div class="article pt-12">
       <!-- header -->
       <div class="article__head">
-        <h1 class="text-5xl leading-loose capitalize">
+        <h1 class="text-5xl leading-none capitalize">
           {{ species.species }}
           <span class="text-3xl font-thin tracking-wide text-gray-600 pl-2 italic normal-case">
             {{ species.scientific_name }}
@@ -11,9 +11,53 @@
         </h1>
       </div>
 
+      <!-- stats -->
+      <h2 class="text-2xl text-gray-700 leading-normal font-light tracking-wide bleed mt-16">
+        Quick Stats
+      </h2>
+      <div class="bleed flex flex-wrap justify-between px-4">
+        <!-- stat items -->
+        <div class="p-4 sm:w-1/4 w-1/2">
+          <h2 class="title-font font-medium sm:text-4xl text-3xl text-gray-900">
+            {{ stateRecord.pounds }}<span class="text-base">lbs</span>
+            {{ stateRecord.ounces }}<span class="text-base">oz</span>
+          </h2>
+          <p class="leading-normal uppercase text-sm font-light tracking-wide">
+            State Record
+          </p>
+        </div>
+        <!-- stat items -->
+        <div class="p-4 sm:w-1/4 w-1/2">
+          <h2 class="title-font font-medium sm:text-4xl text-3xl text-gray-900">
+            {{ species.min_trophy_weight }}<span class="text-base">lbs</span>
+          </h2>
+          <p class="leading-normal uppercase text-sm font-light tracking-wide">
+            Min Trophy Weight
+          </p>
+        </div>
+        <!-- stat items -->
+        <div class="p-4 sm:w-1/4 w-1/2">
+          <h2 class="title-font font-medium sm:text-4xl text-3xl text-gray-900">
+            {{ fishEntries.totalRecords }}
+          </h2>
+          <p class="leading-normal uppercase text-sm font-light tracking-wide">
+            Total Entries
+          </p>
+        </div>
+        <!-- stat items -->
+        <div class="p-4 sm:w-1/4 w-1/2">
+          <h2 class="title-font font-medium sm:text-4xl text-3xl text-gray-900">
+            {{ waterBodies.geojson.features.length }}
+          </h2>
+          <p class="leading-normal uppercase text-sm font-light tracking-wide">
+            Water Bodies
+          </p>
+        </div>
+      </div>
+
       <!-- description -->
-      <div class="article__content my-32">
-        <p class="text-xl text-gray-700 font-thin text-center">
+      <div class="article__content mt-20 bg-white rounded shadow-2xl -mb-32 p-8 z-0">
+        <p class="text-xl text-gray-600 italic font-light text-center">
           {{ species.description }}
         </p>
       </div>
@@ -94,7 +138,7 @@ export default {
     const url = `/api/species/${params.id}`
 
     const species = await $axios.$get(url)
-    const fishEntries = await $axios.$get(`${url}/fish-entries?order=desc.fish_weight&&page=1&per_page=25`)
+    const fishEntries = await $axios.$get(`${url}/fish-entries?order=desc.fish_weight&&page=1&per_page=15`)
     const waterBodies = await $axios.$get(`${url}/water-bodies`)
 
     return {
@@ -112,11 +156,20 @@ export default {
           label: 'Angler Name',
           field: 'angler_name'
         }, {
+          label: 'Water Body',
+          field: 'water_name'
+        }, {
           label: 'Pounds',
           field: 'pounds'
         }, {
           label: 'Ounces',
           field: 'ounces'
+        }, {
+          label: 'Fish Length',
+          field: 'fish_length'
+        }, {
+          label: 'Trophy Status',
+          field: 'trophy_status'
         }
       ],
       paginationOptions: {
@@ -132,7 +185,11 @@ export default {
           type: ''
         },
         page: 1,
-        perPage: 25
+        perPage: 15
+      },
+      stateRecord: {
+        pounds: null,
+        ounces: null
       }
     }
   },
@@ -143,7 +200,10 @@ export default {
         .map(m => ({
           angler_name: m.angler_name,
           pounds: m.pounds,
-          ounces: m.ounces
+          ounces: m.ounces,
+          fish_length: m.fish_length,
+          water_name: m.water_name,
+          trophy_status: m.trophy_classification
         }))
     },
 
@@ -154,10 +214,20 @@ export default {
       querystring.append('order', 'desc.fish_weight')
 
       querystring.append('page', this.query.page || 1)
-      querystring.append('per_page', this.query.perPage || 25)
+      querystring.append('per_page', this.query.perPage || 15)
 
       return querystring.toString()
     }
+  },
+
+  created () {
+    this.stateRecord.pounds = this.fishEntries.data[0].pounds
+    this.stateRecord.ounces = this.fishEntries.data[0].ounces
+
+    // this.$nextTick(() => {
+    //   this.stateRecord.pounds = this.fishEntries.data[0].pounds
+    //   this.stateRecord.ounces = this.fishEntries.data[0].ounces
+    // })
   },
 
   methods: {
@@ -220,6 +290,10 @@ export default {
 }
 
 .article__table--bleed {
+  grid-column: bleed;
+}
+
+.bleed {
   grid-column: bleed;
 }
 </style>
