@@ -2,7 +2,11 @@ const { db } = require('../../db')
 const { parseOrder } = require('../../utils/sqlqs.js')
 /* 
 schema and logic for route:
-/fishable-waters/:id/fish-entries
+/species/:id/fish-entries
+
+This logic is almost exactly the same as in routes/fishable-waters/fish-entries
+there is probably a better way to abstract this logic? The easiest,
+method might be to extract the handler and add it to a "handlers" file?
 */
 
 // declare schema
@@ -64,21 +68,21 @@ const schema = {
 }
 
 // define route handler
-async function getFishEntries ({ query, params }, reply) {
+async function getFishEntries({ query, params }, reply) {
   // format pagination params
   const limit = query.per_page || 25
   const offset = query.page ? (query.page - 1) * limit : 0
 
   // construct params object for repo/services
-  // manually constructing the filter b/c water_id is 
+  // manually constructing the filter b/c fish_id is 
   // in the params instead of the query
   const queryParams = {
     filters: [{
-      column: 'water_id',
+      column: 'species_id',
       operator: '=',
       criteria: params.id
     }],
-    order: parseOrder(query.order), 
+    order: parseOrder(query.order),
     pagination: { limit, offset }
   }
 

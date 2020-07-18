@@ -10,6 +10,14 @@ CREATE TABLE etl.species (
   species text
 );
 
+CREATE TABLE etl.species_descriptions (
+  species text,
+  abbr text,
+  scientific_name text,
+  description text,
+  other_names text
+);
+
 CREATE TABLE etl.species_water_joiner (
   label text,
   abbr text,
@@ -51,7 +59,11 @@ CREATE TABLE etl.fish_entries (
 CREATE TABLE public.species (
   id uuid PRIMARY KEY default uuid_generate_v4(),
   species text NOT NULL,
-  abbr text
+  abbr text,
+  scientific_name text,
+  min_trophy_weight numeric,
+  description text,
+  other_names text
 );
 
 CREATE TABLE public.fishable_waters (

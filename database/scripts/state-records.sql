@@ -1,16 +1,3 @@
--- SELECT
---   species.species,
---   fish_entries.water_id,
---   fish_entries.date_caught,
---   fish_entries.pounds,
---   fish_entries.ounces,
---   fish_entries.fish_weight,
---   fish_entries.fish_length,
---   fish_entries.angler_name,
---   fish_entries.angler_city,
---   fish_entries.angler_state
--- FROM fish_entries
---   JOIN species ON fish_entries.species_id = species.id
 SELECT
   fish_entries.id,
   fish_entries.species_id,
@@ -67,6 +54,4 @@ FROM fish_entries
         AND fish_entries.water_id = water_records.water_id
     ) AS tc ON fish_entries.id = tc.id
   JOIN fishable_waters ON fish_entries.water_id = fishable_waters.id
-$<where:raw>
-$<order:raw>
-$<pagination:raw>
+WHERE species_id = '4b59a91b-a4c2-460a-9e32-9efddf7ac938'

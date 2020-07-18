@@ -63,9 +63,25 @@
             :columns="columns"
             :rows="rows"
             :total-rows="fishEntries.totalRecords"
+            :row-style-class="rowStyles"
             @on-page-change="onPageChange"
             @on-per-page-change="onPerPageChange"
-          />
+          >
+            <template slot="table-row" slot-scope="props">
+              <span v-if="props.column.field === 'species'">
+                <nuxt-link
+                  :to="{name: 'species-id', params: { id: props.row.species_id }}"
+                  class="underline text-blue-700"
+                  :prefetch="false"
+                >
+                  {{ props.row.species }}
+                </nuxt-link>
+              </span>
+              <span v-else>
+                {{ props.formattedRow[props.column.field] }}
+              </span>
+            </template>
+          </vue-good-table>
         </div>
       </div>
       <!-- if hasFishEntreis === false -->
@@ -152,6 +168,14 @@ export default {
         }, {
           label: 'Angler State',
           field: 'angler_state'
+        }, {
+          label: 'Trophy Status',
+          field: 'trophy_status',
+          hidden: true
+        }, {
+          label: 'species_id',
+          field: 'species_id',
+          hidden: true
         }
       ],
       paginationOptions: {
@@ -180,7 +204,9 @@ export default {
           species: m.species,
           pounds: m.pounds,
           ounces: m.ounces,
-          angler_state: m.angler_state
+          angler_state: m.angler_state,
+          trophy_status: m.trophy_classification,
+          species_id: m.species_id
         }))
     },
 
@@ -230,6 +256,15 @@ export default {
       console.log(url)
       const data = await this.$axios.$get(url)
       this.fishEntries = data
+    },
+
+    rowStyles (row) {
+      const styles = {
+        'state record': 'bg-yellow-200',
+        'water record': 'bg-blue-100',
+        'trophy fish': 'bg-purple-100'
+      }
+      return styles[row.trophy_status]
     }
   }
 }

@@ -146,3 +146,99 @@ FROM (
   WHERE tf_db_name = 'northern pike'
 ) AS sq
 WHERE etl.fish_entries.species = 'Pike, Northern*';
+
+/* INSERT SPECIES DESCRIPTIONS */
+-- update scientific name
+UPDATE public.species
+SET scientific_name = sq.scientific_name
+FROM public.species AS t 
+JOIN (
+  SELECT
+    species.id,
+    species_descriptions.scientific_name
+  FROM species
+  JOIN etl.species_descriptions ON species.species = species_descriptions.species
+) as sq ON t.id = sq.id
+WHERE public.species.id = sq.id;
+
+-- update description
+UPDATE public.species
+SET description = sq.description
+FROM public.species AS t 
+JOIN (
+  SELECT
+    species.id,
+    species_descriptions.description
+  FROM species
+  JOIN etl.species_descriptions ON species.species = species_descriptions.species
+) as sq ON t.id = sq.id
+WHERE public.species.id = sq.id;
+
+-- update other names
+UPDATE public.species
+SET other_names = sq.other_names
+FROM public.species AS t 
+JOIN (
+  SELECT
+    species.id,
+    species_descriptions.other_names
+  FROM species
+  JOIN etl.species_descriptions ON species.species = species_descriptions.species
+) as sq ON t.id = sq.id
+WHERE public.species.id = sq.id;
+
+/* MINIMUM TROPHY WEIGHTS */
+CREATE TABLE etl.min_trophy_weight (
+  species text,
+  min_trophy_weight numeric
+);
+
+INSERT INTO etl.min_trophy_weight (
+  species, min_trophy_weight
+)
+VALUES
+  ('largemouth bass', 5),
+  ('smallmouth bass', 3),
+  ('spotted bass', 2),
+  ('striped bass', 20),
+  ('white bass', 2),
+  ('carp', 15),
+  ('bullhead catfish', 1),
+  ('channel catfish', 10),
+  ('white catfish', 2),
+  ('black crappie', 2),
+  ('white crappie', 2),
+  ('sacramento perch', 2),
+  ('yellow perch', 0.5),
+  ('kokanee salmon', 2),
+  ('bluegill sunfish', 1),
+  ('green sunfish', 0.5),
+  ('pumpkinseed', 0.5),
+  ('redear sunfish', 0.5),
+  ('brook trout', 2),
+  ('brown trout', 5),
+  ('bull trout', 0.5),
+  ('cutthroat trout', 10),
+  ('mackinaw trout', 10),
+  ('rainbow trout', 5),
+  ('bowcutt trout', 10),
+  ('tiger trout', 2),
+  ('walleye', 6),
+  ('whitefish', 1),
+  ('wiper', 5),
+  ('arctic grayling', 0.5),
+  ('northern pike', 10),
+  ('silver salmon', 5);
+
+-- update species table with minimum trophy weight
+UPDATE public.species
+SET min_trophy_weight = sq.min_trophy_weight
+FROM public.species AS t 
+JOIN (
+  SELECT
+    species.id,
+    etl.min_trophy_weight.min_trophy_weight
+  FROM species
+    LEFT JOIN etl.min_trophy_weight ON species.species = min_trophy_weight.species
+) as sq ON t.id = sq.id
+WHERE public.species.id = sq.id;

@@ -14,6 +14,7 @@ build: scripts/build.sql
 
 extract: build $(DATA)/tf-utf8.csv
 	psql $(URI) -c "\copy etl.species from '$(DATA)/species-lkp.csv' with csv header"
+	psql $(URI) -c "\copy etl.species_descriptions from '$(DATA)/species.csv' with csv header"
 	psql $(URI) -c "\copy etl.species_water_joiner from '$(DATA)/species-water-joiner.csv' with csv header"
 	psql $(URI) -c "\copy etl.fs from '$(DATA)/trophy-fish-species.csv' with csv header"
 	psql $(URI) -c "\copy etl.fish_entries from '$(DATA)/tf-utf8.csv' with csv header"

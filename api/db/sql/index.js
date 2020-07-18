@@ -15,6 +15,11 @@ module.exports = {
   spatial: {
     getGeoJSON: sql('spatial/geojson.sql')
   },
+  species: {
+    getAll: sql('species/get-all.sql'),
+    getById: sql('species/get-by-id.sql'),
+    getWaterBodies: sql('species/water-bodies.sql')
+  }
 }
 
 function sql(file) {

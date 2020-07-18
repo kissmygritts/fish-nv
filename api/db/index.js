@@ -5,7 +5,8 @@ const sql = require('./sql')
 const {
   FishableWaters,
   FishEntries,
-  Spatial
+  Spatial,
+  Species
 } = require('./repos')
 
 const initOptions = {
@@ -15,6 +16,7 @@ const initOptions = {
     obj.fishableWaters = new FishableWaters(obj, pgp)
     obj.fishEntries = new FishEntries(obj, pgp)
     obj.spatial = new Spatial(obj, pgp)
+    obj.species = new Species(obj, pgp)
   }
 }
 
