@@ -115,15 +115,32 @@
           :pagination-options="paginationOptions"
           :sort-options="{ enabled: false }"
           :total-rows="fishEntries.totalRecords"
+          :row-style-class="rowStyles"
           @on-page-change="onPageChange"
           @on-per-page-change="onPerPageChange"
-        />
+        >
+          <template slot="table-row" slot-scope="props">
+            <span v-if="props.column.field === 'water_name'">
+              <nuxt-link
+                :to="{name: 'fishable-waters-id', params: { id: props.row.water_id }}"
+                class="underline text-blue-700"
+                :prefetch="false"
+              >
+                {{ props.row.water_name }}
+              </nuxt-link>
+            </span>
+            <span v-else>
+              {{ props.formattedRow[props.column.field] }}
+            </span>
+          </template>
+        </vue-good-table>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+/* eslint-disable */
 import { VueGoodTable } from 'vue-good-table'
 import 'vue-good-table/dist/vue-good-table.css'
 import GeoJsonMap from '@/components/geojson-map.vue'
@@ -170,6 +187,10 @@ export default {
         }, {
           label: 'Trophy Status',
           field: 'trophy_status'
+        }, {
+          label: 'water_id',
+          field: 'water_id',
+          hidden: true
         }
       ],
       paginationOptions: {
@@ -203,7 +224,8 @@ export default {
           ounces: m.ounces,
           fish_length: m.fish_length,
           water_name: m.water_name,
-          trophy_status: m.trophy_classification
+          trophy_status: m.trophy_classification,
+          water_id: m.water_id
         }))
     },
 
@@ -249,6 +271,15 @@ export default {
       const url = `${this.url}/fish-entries?${this.querystring}`
       const data = await this.$axios.$get(url)
       this.fishEntries = data
+    },
+
+    rowStyles (row) {
+      const styles = {
+        'state record': 'bg-yellow-200',
+        'water record': 'bg-blue-100',
+        'trophy fish': 'bg-purple-100'
+      }
+      return styles[row.trophy_status]
     }
   }
 }
