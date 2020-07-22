@@ -122,6 +122,33 @@
           trophy fish program. For more information about the trophy fish program
           see this link (add link).
         </p>
+
+        <!-- table row legend -->
+        <div class="mt-6">
+          <h4 class="text-xl tracking-wide">
+            Table Legend
+          </h4>
+          <div class="text-grey-700 font-thin">
+            <div class="flex items-center pt-2">
+              <div class="bg-yellow-200 w-8 h-8 border" />
+              <div class="pl-4">
+                State Record - this fish is the largest caught of the specified species
+              </div>
+            </div>
+            <div class="flex items-center pt-2">
+              <div class="bg-blue-100 w-8 h-8 border" />
+              <div class="pl-4">
+                Water Record - this fish is the largest caught in the specified fishable water
+              </div>
+            </div>
+            <div class="flex items-center pt-2">
+              <div class="bg-purple-100 w-8 h-8 border" />
+              <div class="pl-4">
+                Trophy Fish - this fish meets the minimum trophy requirements
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- actual table -->

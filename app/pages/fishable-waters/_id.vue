@@ -1,6 +1,6 @@
 <!-- eslint-disble -->
 <template>
-  <div class="text-gray-900">
+  <div class="text-gray-900 pb-24">
     <header class="px-2 py-6 md:px-4 md:py-8 lg:px-8 container mx-auto">
       <h1 class="text-4xl leading-loose">
         {{ fishableWater.water_name }}
@@ -58,10 +58,46 @@
           </div>
         </div>
 
-        <div class="w-100 text-center pt-16 container mx-auto">
-          <h2 class="text-2xl tracking-wide font-hairline text-left md:text-center px-5">
-            All Fish Entries
-          </h2>
+        <!-- table of all fish entries -->
+        <div class="w-100 pt-16 container mx-auto">
+          <!-- table description -->
+          <div class="w-7/12 mx-auto">
+            <h2 class="text-4xl tracking-wide ">
+              All Fish Entries
+            </h2>
+            <p class="text-lg font-thin text-gray-700 mt-6">
+              The table below shows all the fish caught at {{ fishableWater.water_name }}
+              and submitted to NDOW as part of the Trophy Fish Program. For more information
+              about the trophy fish program see this link (add link).
+            </p>
+
+            <!-- table legend -->
+            <div class="mt-6">
+              <h4 class="text-xl tracking-wide">
+                Table Legend
+              </h4>
+              <div class="text-grey-700 font-thin">
+                <div class="flex items-center pt-2">
+                  <div class="bg-yellow-200 w-8 h-8 border" />
+                  <div class="pl-4">
+                    State Record - this fish is the largest caught of the specified species
+                  </div>
+                </div>
+                <div class="flex items-center pt-2">
+                  <div class="bg-blue-100 w-8 h-8 border" />
+                  <div class="pl-4">
+                    Water Record - this fish is the largest caught in the specified fishable water
+                  </div>
+                </div>
+                <div class="flex items-center pt-2">
+                  <div class="bg-purple-100 w-8 h-8 border" />
+                  <div class="pl-4">
+                    Trophy Fish - this fish meets the minimum trophy requirements
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <vue-good-table
             class="pt-10"
