@@ -230,8 +230,12 @@ export default {
           label: 'Fish Length',
           field: 'fish_length'
         }, {
+          label: 'Year',
+          field: 'date_caught'
+        }, {
           label: 'Trophy Status',
-          field: 'trophy_status'
+          field: 'trophy_status',
+          hidden: true
         }, {
           label: 'water_id',
           field: 'water_id',
@@ -263,15 +267,21 @@ export default {
   computed: {
     rows () {
       return this.fishEntries.data
-        .map(m => ({
-          angler_name: m.angler_name,
-          pounds: m.pounds,
-          ounces: m.ounces,
-          fish_length: m.fish_length,
-          water_name: m.water_name,
-          trophy_status: m.trophy_classification,
-          water_id: m.water_id
-        }))
+        .map(m => {
+          const dateCaught = new Date(m.date_caught)
+
+          return {
+            angler_name: m.angler_name,
+            pounds: m.pounds,
+            ounces: m.ounces,
+            fish_length: m.fish_length,
+            water_name: m.water_name,
+            trophy_status: m.trophy_classification,
+            water_id: m.water_id,
+            date_caught: dateCaught.getFullYear()
+          }
+        }
+      )
     },
 
     querystring () {
