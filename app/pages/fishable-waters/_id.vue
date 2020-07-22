@@ -16,12 +16,20 @@
           class="mr-2 rounded capitalize"
         />
       </div>
+
+      <!-- nav links -->
       <div class="pt-2">
+        <a
+          class="text-blue-700 underline cursor-pointer"
+          @click="previousPage"
+        >
+          &larr; Previous Page
+        </a>
         <nuxt-link
           to="/map"
-          class="text-blue-700 underline"
+          class="pl-2 text-blue-700 underline"
         >
-          &larr; Back To Map
+          Explore Map
         </nuxt-link>
       </div>
     </header>
@@ -265,6 +273,10 @@ export default {
         'trophy fish': 'bg-purple-100'
       }
       return styles[row.trophy_status]
+    },
+
+    previousPage () {
+      this.$router.back()
     }
   }
 }

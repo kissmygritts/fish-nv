@@ -9,6 +9,22 @@
             {{ species.scientific_name }}
           </span>
         </h1>
+
+        <!-- nav-links -->
+        <div class="pt-2">
+          <a
+            class="text-blue-700 underline cursor-pointer"
+            @click="previousPage"
+          >
+            &larr; Previous Page
+          </a>
+          <nuxt-link
+            to="/map"
+            class="pl-2 text-blue-700 underline"
+          >
+            Explore Map
+          </nuxt-link>
+        </div>
       </div>
 
       <!-- stats -->
@@ -291,6 +307,10 @@ export default {
           id: feature.id
         }
       })
+    },
+
+    previousPage () {
+      this.$router.back()
     }
   }
 }
