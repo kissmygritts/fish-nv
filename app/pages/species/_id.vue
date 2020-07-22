@@ -89,8 +89,10 @@
       <!-- actual map -->
       <div class="article__map--bleed mt-8">
         <geo-json-map
+          :enable-tooltip="true"
           :geojson="waterBodies.geojson"
           class="w-full"
+          @feature:click="navigateTo"
         />
       </div>
 
@@ -280,6 +282,15 @@ export default {
         'trophy fish': 'bg-purple-100'
       }
       return styles[row.trophy_status]
+    },
+
+    navigateTo (feature) {
+      this.$router.push({
+        name: 'fishable-waters-id',
+        params: {
+          id: feature.id
+        }
+      })
     }
   }
 }

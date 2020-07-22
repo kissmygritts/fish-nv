@@ -6,6 +6,7 @@ SELECT
 FROM (
   SELECT
     -- add species array here?
+    fishable_waters.id,
     fishable_waters.water_name,
     fishable_waters.geom
   FROM species
