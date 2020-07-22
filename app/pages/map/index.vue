@@ -114,6 +114,10 @@ export default {
     }
   },
 
+  mounted () {
+    this.searchFishableWaters({ params: { s: null } })
+  },
+
   methods: {
     navigateTo (feature) {
       this.$router.push({
@@ -141,8 +145,10 @@ export default {
         const res = await this.$axios.get(url)
         this.search.results = res.data
       } else {
-        // else, no params or params are null, set search results = null
-        this.search.results = null
+        // else, no params or params are null, return all results
+        const res = await this.$axios.get('/api/fishable-waters')
+
+        this.search.results = res.data
         this.search.params = null
       }
 
