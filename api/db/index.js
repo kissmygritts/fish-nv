@@ -9,6 +9,7 @@ const {
   Species
 } = require('./repos')
 
+const conn = process.env.DBURI || dbConfig
 const initOptions = {
   promiseLib: promise,
 
@@ -21,6 +22,6 @@ const initOptions = {
 }
 
 const pgp = pgPromise(initOptions)
-const db = pgp(dbConfig)
+const db = pgp(conn)
 
 module.exports = { db, pgp, sql }
