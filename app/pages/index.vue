@@ -69,7 +69,7 @@
           </h2>
           <p class="text-base leading-relaxed mx-auto px-12">
             Fish NV is an application to help you find ideal fishing locations.
-            All the information is provided by fellow Nevada Fishermen and women.
+            All the information is provided by fellow Nevada anglers.
             See below for more information about the data used within the app.
           </p>
         </div>
@@ -144,7 +144,7 @@
                 from here.
               </p>
               <p class="mt-2 pl-4">
-                The Trophy Fish Database contains user submitted fish data. Nevada fishermen and women
+                The Trophy Fish Database contains user submitted fish data. Nevada anglers
                 can submit fish records to NDOW for inclusion in an annual Trophy Fish Book generated
                 by the department. This book isn't limited to trophy fish.
               </p>
@@ -184,7 +184,8 @@ export default {
       rgba(0, 0, 0, 0.5),
       rgba(0, 0, 0, 0.05)
     ),
-    url(https://source.unsplash.com/qNhstTawQrI/1920x1080);
+    url(~assets/img/hero-img.jpg)
+    /* url(https://source.unsplash.com/qNhstTawQrI/1920x1080); */
     /* background-image: url(https://source.unsplash.com/qNhstTawQrI/1600x900); */
 }
 
