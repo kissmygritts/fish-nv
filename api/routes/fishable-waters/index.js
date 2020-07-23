@@ -23,3 +23,5 @@ module.exports = function (fastify, opts, next) {
 
   next()
 }
+
+module.exports.prefixOverride = ''
