@@ -23,6 +23,11 @@ class SpatialRepository {
       columns: columnNames
     })
   }
+
+  async getGeobuf () {
+    const res = await this.db.any(sql.getGeobuf)
+    return res[0].st_asgeobuf
+  }
 }
 
 module.exports = SpatialRepository

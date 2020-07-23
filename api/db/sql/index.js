@@ -13,6 +13,7 @@ module.exports = {
     count: sql('fish-entries/count.sql')
   },
   spatial: {
+    getGeobuf: sql('spatial/geobuf.sql'),
     getGeoJSON: sql('spatial/geojson.sql')
   },
   species: {

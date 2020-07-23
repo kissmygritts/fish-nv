@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import geobuf from 'geobuf'
+import Pbf from 'pbf'
 import FishableWatersMap from '@/components/fishable-waters-map.vue'
 import SearchContainer from '@/components/search-container.vue'
 
@@ -157,8 +159,13 @@ export default {
 
     async loadGeometry () {
       this.geometry.loading = true
-      const res = await this.$axios.get('/api/geojson/fishable_waters?columns=water_name,id')
-      this.geometry.results = res.data.geojson
+
+      const res = await this.$axios.get('/api/geobuf', {
+        responseType: 'arraybuffer'
+      })
+      const geojson = geobuf.decode(new Pbf(res.data))
+
+      this.geometry.results = geojson
       this.geometry.loading = false
     }
   }
