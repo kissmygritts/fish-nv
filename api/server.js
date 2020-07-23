@@ -8,6 +8,9 @@ fastify.register(require('fastify-cors'), {
   origin: '*'
 })
 
+// compression
+fastify.register(require('fastify-compress'))
+
 
 // register routes
 fastify.register(autoload, {
