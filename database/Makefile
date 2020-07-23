@@ -4,7 +4,6 @@ LOADOBJS = scripts/load-01-fishable-waters.sql \
 					 scripts/load-03-tf-wrangle-entries.sql \
 					 scripts/load-04-tf-entries.sql
 URI = trophy_fish
-#URI = fish-nv
 
 utfify: $(DATA)/trophy-fish-data.csv
 	-iconv -sc -t utf8 ../data/trophy-fish-data.csv > ../data/tf-utf8.csv
@@ -18,12 +17,8 @@ extract: build $(DATA)/tf-utf8.csv
 	psql $(URI) -c "\copy etl.species_water_joiner from '$(DATA)/species-water-joiner.csv' with csv header"
 	psql $(URI) -c "\copy etl.fs from '$(DATA)/trophy-fish-species.csv' with csv header"
 	psql $(URI) -c "\copy etl.fish_entries from '$(DATA)/tf-utf8.csv' with csv header"
-	# the following line throws an warning, but imports the data
+	# the following line must be changed when building the remote database
 	ogr2ogr -f PostgreSQL "PG:dbname=$(URI)" -lco SCHEMA=etl $(DATA)/fishable-waters.gpkg
-	# ogr2ogr -f PostgreSQL \
-	# 	"PG:dbname='dbname' host='hostname' port='port' user='username'" \
-	# 	-lco SCHEMA=etl \
-	# 	$(DATA)/fishable-waters.gpkg
 
 loadscript.sql: $(LOADOBJS)
 	cat $(LOADOBJS) > $@
