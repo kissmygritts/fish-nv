@@ -52,7 +52,13 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    proxy: true
+    proxy: true,
+    headers: {
+      common: {
+        Accept: 'application/json, text/plain, */*',
+        'Accept-Encoding': 'gzip, deflate'
+      }
+    }
   },
 
   proxy: {
