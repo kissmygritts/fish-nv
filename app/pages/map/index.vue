@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen w-screen text-gray-700">
+  <div class="flex flex-col lg:flex-row h-screen w-screen text-gray-700">
     <main id="map" class="flex-grow">
       <client-only>
         <fishable-waters-map
@@ -9,7 +9,7 @@
       </client-only>
     </main>
 
-    <aside class="bg-gray-100 w-1/4 flex flex-col px-4 overflow-y-auto">
+    <aside class="hidden lg:block bg-gray-100 lg:w-1/3 xl:w-1/4 flex flex-col px-4 overflow-y-auto">
       <!-- search container -->
       <search-container @selected="searchFishableWaters" />
       <!-- results -->
@@ -48,6 +48,74 @@
         </nuxt-link>
       </footer>
     </aside>
+
+    <!-- mobile menu buttons -->
+    <div class="lg:hidden h-16 bg-green-500 w-100 inline-flex">
+      <button
+        class="w-1/3 relative inline-flex items-center justify-center border border-gray-300 bg-white text-sm"
+        @click="showMap"
+      >
+        Map
+      </button>
+      <button
+        class="w-1/3 relative inline-flex items-center justify-center border border-gray-300 bg-white text-sm"
+        @click="toggleWatersPanel"
+      >
+        Waters
+      </button>
+      <button
+        class="w-1/3 relative inline-flex items-center justify-center border border-gray-300 bg-white text-sm"
+        @click="toggleFiltersPanel"
+      >
+        Filters
+      </button>
+    </div>
+
+    <!-- overlay panel -->
+    <transition name="fade">
+      <div
+        v-if="watersPanelVisible"
+        class="lg:hidden overlay-panel bg-gray-100 overflow-scroll"
+      >
+        <div class="w-full mt-2 mb-4">
+          <div v-if="hasSearchResults">
+            <p class="p-2 text-lg">
+              Found {{ search.results.length }} Fishable Waters
+            </p>
+            <div
+              v-for="water in search.results"
+              :key="water.id"
+            >
+              <nuxt-link :to="{ name: 'fishable-waters-id', params: { id: water.id } }" no-prefetch>
+                <div
+                  class="flex items-center justify-between p-3 w-full bg-white border-b-2 border-gray-100 last:border-b-0 rounded-none last:border-b-full"
+                >
+                  <div>
+                    <h2 class="text-gray-800 text-lg">
+                      {{ water.water_name }}
+                    </h2>
+                  </div>
+                  <div>
+                    <h3 class="text-gray-500 font-light tracking-wide">
+                      {{ water.label }}
+                    </h3>
+                  </div>
+                </div>
+              </nuxt-link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+    <transition name="fade">
+      <div
+        v-if="filtersPanelVisible"
+        class="lg:hidden overlay-panel bg-gray-100 p-4 md:p-8"
+      >
+        <search-container @selected="searchFishableWaters" />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -73,7 +141,9 @@ export default {
       geometry: {
         loading: false,
         results: {}
-      }
+      },
+      watersPanelVisible: false,
+      filtersPanelVisible: false
     }
   },
 
@@ -121,6 +191,21 @@ export default {
   },
 
   methods: {
+    toggleWatersPanel () {
+      this.watersPanelVisible = !this.watersPanelVisible
+      this.filtersPanelVisible = false
+    },
+
+    toggleFiltersPanel () {
+      this.filtersPanelVisible = !this.filtersPanelVisible
+      this.watersPanelVisible = false
+    },
+
+    showMap () {
+      this.watersPanelVisible = false
+      this.filtersPanelVisible = false
+    },
+
     navigateTo (feature) {
       this.$router.push({
         path: `fishable-waters/${feature.id}`
@@ -175,6 +260,27 @@ export default {
 
 <style>
 #map {
-  height: 100vh;
+  height: 100%;
+}
+
+.overlay-panel {
+  position: absolute;
+  height: calc(100% - 4rem);
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+}
+
+.fade-enter-active {
+  transition: opacity .1s;
+}
+
+.fade-leave-active {
+  transition: opacity .2s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>
