@@ -9,7 +9,9 @@ fastify.register(require('fastify-cors'), {
 })
 
 // compression
-fastify.register(require('fastify-compress'))
+fastify.register(require('fastify-compress'), {
+  customTypes: /^text\/|\+json$|\+text$|\+xml|x-protobuf$/
+})
 
 
 // register routes
