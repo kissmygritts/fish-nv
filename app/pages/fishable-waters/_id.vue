@@ -148,7 +148,9 @@
             </p>
             <div class="mt-6">
               <a
-                href="https://nevada.licensing.kalkomey.com/licenses"
+                href="https://nevada.licensing.kalkomey.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
                 Buy a fishing license

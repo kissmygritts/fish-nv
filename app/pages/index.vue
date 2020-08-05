@@ -52,6 +52,8 @@
           </nuxt-link>
           <a
             href="https://nevada.licensing.kalkomey.com/"
+            target="_blank"
+            rel="noopener noreferrer"
             class="ml-4 text-gray-100 bg-gray-600 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded-sm text-lg"
           >
             Buy a Fishing License
@@ -157,7 +159,7 @@
     <!-- footer -->
     <footer class="text-gray-500 bg-gray-800 body-font">
       <div class="container px-5 py-8 mx-auto flex items-center">
-        <a href="http://www.ndow.org" class="title-font font-medium text-white">
+        <a href="http://www.ndow.org" class="title-font font-medium text-white" target="_blank" rel="noopener noreferrer">
           Nevada Department of Wildlife
         </a>
       </div>
