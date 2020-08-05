@@ -55,8 +55,7 @@ export default {
     proxy: true,
     headers: {
       common: {
-        Accept: 'application/json, text/plain, */*',
-        'Accept-Encoding': 'gzip, deflate'
+        Accept: 'application/json, text/plain, */*'
       }
     }
   },

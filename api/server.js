@@ -10,7 +10,8 @@ fastify.register(require('fastify-cors'), {
 
 // compression
 fastify.register(require('fastify-compress'), {
-  customTypes: /^text\/|\+json$|\+text$|\+xml|x-protobuf$/
+  customTypes: /^text\/|\+json$|\+text$|\+xml|x-protobuf$/,
+  encodings: ['gzip', 'deflate']
 })
 
 
