@@ -1,51 +1,32 @@
 <template>
   <div class="bg-gray-100">
-    <header class="text-gray-500 bg-gray-800 body-font top-0 left-0 right-0 absolute">
-      <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <a href="/" class="title-font font-medium text-white mb-4 md:mb-0">
-          <span class="text-xl">Fish NV</span>
-        </a>
-        <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
-          <a
-            class="mr-5 text-gray-200 hover:text-white cursor-pointer"
-            @click="scrollTo('FAQ')"
-          >
-            FAQ
-          </a>
-        </nav>
-        <nuxt-link
-          to="/map"
-          class="bg-blue-500 text-white border-0 py-1 px-4 focus:outline-none hover:bg-blue-600 rounded-sm text-base"
-        >
-          Explore
-        </nuxt-link>
-      </div>
-    </header>
+    <header-nav ref="nav" />
+
     <!-- hero section -->
     <div
       id="hero"
-      class="w-screen h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center"
+      class="w-screen md:h-screen bg-cover bg-center bg-no-repeat flex md:items-center md:justify-center py-16 sm:py-32"
     >
       <!-- call to action section -->
       <div
         id="cta"
-        class="text-white lg:w-1/2 p-24 text-center"
+        class="text-white w-full md:w-3/4 lg:w-7/12 px-4 md:text-center"
       >
-        <h1 class="text-4xl leading-tight font-light text-shadow">
+        <h1 class="text-3xl leading-tight font-light text-shadow">
           534 Fishable Waters and 39 Sport Fish Species
         </h1>
-        <p class="mt-4 text-2xl font-light leading-snug text-shadow">
-          From Lake Mead to high mountain creeks and lakes
+        <p class="mt-6 text-xl font-light leading-snug text-shadow">
+          From desert creeks to high mountain lakes
           Nevada offers endless fishing possibilites. We've
           built this app to help you discover the perfect
           Nevada fishing adventure.
         </p>
 
         <!-- links -->
-        <div class="flex mt-8 justify-center">
+        <div class="flex flex-wrap w-full mt-8 text-center md:justify-center">
           <nuxt-link
             to="/map"
-            class="text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded-sm text-lg"
+            class="w-full sm:w-64 text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded-sm text-lg"
             prefetch
           >
             Explore the Map!
@@ -54,7 +35,7 @@
             href="https://nevada.licensing.kalkomey.com/"
             target="_blank"
             rel="noopener noreferrer"
-            class="ml-4 text-gray-100 bg-gray-600 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded-sm text-lg"
+            class="w-full sm:w-64 mt-2 sm:mt-0 sm:ml-2 text-gray-100 bg-gray-600 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded-sm text-lg"
           >
             Buy a Fishing License
           </a>
@@ -168,13 +149,11 @@
 </template>
 
 <script>
+import HeaderNav from '@/components/header-nav.vue'
+
 export default {
-  methods: {
-    scrollTo (el) {
-      document
-        .getElementById(el)
-        .scrollIntoView({ behavior: 'smooth' })
-    }
+  components: {
+    HeaderNav
   }
 }
 </script>
