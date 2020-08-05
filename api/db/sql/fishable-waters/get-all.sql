@@ -18,3 +18,4 @@ FROM fishable_waters AS fw
       JOIN species_water_joiner ON species.id = species_water_joiner.species_id
     GROUP BY species_water_joiner.water_id
   ) AS species ON fw.id = species.water_id
+ORDER BY water_name
