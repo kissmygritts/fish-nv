@@ -20,6 +20,7 @@
       ref="geojson"
       :geojson="geojson"
       :options="options"
+      :options-style="styleFunction"
     />
   </l-map>
 </template>
@@ -90,6 +91,12 @@ export default {
       return {
         onEachFeature: this.onEachFeature
       }
+    },
+
+    styleFunction () {
+      return () => ({
+        weight: 5
+      })
     }
   },
 
