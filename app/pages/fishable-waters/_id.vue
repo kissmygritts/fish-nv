@@ -116,7 +116,7 @@
                 <nuxt-link
                   :to="{name: 'species-id', params: { id: props.row.species_id }}"
                   class="underline text-blue-700"
-                  :prefetch="false"
+                  prefetch
                 >
                   {{ props.row.species }}
                 </nuxt-link>

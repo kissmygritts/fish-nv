@@ -174,7 +174,7 @@
               <nuxt-link
                 :to="{name: 'fishable-waters-id', params: { id: props.row.water_id }}"
                 class="underline text-blue-700"
-                :prefetch="false"
+                prefetch
               >
                 {{ props.row.water_name }}
               </nuxt-link>
