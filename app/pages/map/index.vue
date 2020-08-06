@@ -1,6 +1,8 @@
 <template>
-  <div class="flex flex-col lg:flex-row h-screen w-screen text-gray-700">
-    <main id="map" class="flex-grow">
+  <!-- eslint-disable -->
+  <div class="flex flex-col lg:flex-row text-gray-700 h-full">
+    <!-- map container -->
+    <main class="h-full w-full">
       <client-only>
         <fishable-waters-map
           :geojson="geojson"
@@ -72,54 +74,59 @@
     </div>
 
     <!-- overlay panel -->
-    <transition name="fade">
-      <div
-        v-if="watersPanelVisible"
-        class="lg:hidden overlay-panel bg-gray-100 overflow-scroll"
-      >
-        <div class="w-full mt-2 mb-4">
-          <div v-if="hasSearchResults">
-            <p class="p-2 text-lg">
-              Found {{ search.results.length }} Fishable Waters
-            </p>
-            <div
-              v-for="water in search.results"
-              :key="water.id"
-            >
-              <nuxt-link :to="{ name: 'fishable-waters-id', params: { id: water.id } }" prefetch>
-                <div
-                  class="flex items-center justify-between p-3 w-full bg-white border-b-2 border-gray-100 last:border-b-0 rounded-none last:border-b-full"
-                >
-                  <div>
-                    <h2 class="text-gray-800 text-lg">
-                      {{ water.water_name }}
-                    </h2>
+    <client-only>
+      <transition name="fade">
+        <div
+          v-if="watersPanelVisible"
+          class="lg:hidden overlay-panel bg-gray-100 overflow-y-scroll"
+        >
+          <div class="w-full mt-2 mb-4">
+            <div v-if="hasSearchResults">
+              <p class="p-2 text-lg">
+                Found {{ search.results.length }} Fishable Waters
+              </p>
+              <div
+                v-for="water in search.results"
+                :key="water.id"
+              >
+                <nuxt-link :to="{ name: 'fishable-waters-id', params: { id: water.id } }" prefetch>
+                  <div
+                    class="flex items-center justify-between p-3 w-full bg-white border-b-2 border-gray-100 last:border-b-0 rounded-none last:border-b-full"
+                  >
+                    <div>
+                      <h2 class="text-gray-800 text-lg">
+                        {{ water.water_name }}
+                      </h2>
+                    </div>
+                    <div>
+                      <h3 class="text-gray-500 font-light tracking-wide">
+                        {{ water.label }}
+                      </h3>
+                    </div>
                   </div>
-                  <div>
-                    <h3 class="text-gray-500 font-light tracking-wide">
-                      {{ water.label }}
-                    </h3>
-                  </div>
-                </div>
-              </nuxt-link>
+                </nuxt-link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </transition>
+      </transition>
+    </client-only>
 
-    <transition name="fade">
-      <div
-        v-if="filtersPanelVisible"
-        class="lg:hidden overlay-panel bg-gray-100 p-4 md:p-8"
-      >
-        <search-container @selected="searchFishableWaters" />
-      </div>
-    </transition>
+    <client-only>
+      <transition name="fade">
+        <div
+          v-if="filtersPanelVisible"
+          class="lg:hidden overlay-panel bg-gray-100 p-4 md:p-8"
+        >
+          <search-container @selected="searchFishableWaters" />
+        </div>
+      </transition>
+    </client-only>
   </div>
 </template>
 
 <script>
+/* eslint-disable */
 import geobuf from 'geobuf'
 import Pbf from 'pbf'
 import FishableWatersMap from '@/components/fishable-waters-map.vue'
@@ -260,7 +267,8 @@ export default {
 
 <style>
 #map {
-  height: 100%;
+  flex: 1 0 auto;
+  min-height: auto;
 }
 
 .overlay-panel {

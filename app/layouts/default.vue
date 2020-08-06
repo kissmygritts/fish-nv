@@ -1,12 +1,11 @@
 <template>
-  <div>
+  <div style="height: 100%">
     <nuxt />
   </div>
 </template>
 
 <style>
-body {
+html, body {
   height: 100%;
-  background-color: 'green'
 }
 </style>
