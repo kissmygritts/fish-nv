@@ -63,7 +63,7 @@
         <!-- stat items -->
         <div class="p-4 sm:w-1/4 w-1/2">
           <h2 class="title-font font-medium sm:text-4xl text-3xl text-gray-900">
-            {{ waterBodies.geojson.features.length }}
+            {{ numWaterBodies }}
           </h2>
           <p class="leading-normal uppercase text-sm font-light tracking-wide">
             Water Bodies
@@ -103,13 +103,18 @@
       </div>
 
       <!-- actual map -->
-      <div class="article__map--bleed mt-8">
+      <div v-if="hasWaterBodies" class="article__map--bleed mt-8">
         <geo-json-map
           :enable-tooltip="true"
           :geojson="waterBodies.geojson"
           class="w-full"
           @feature:click="navigateTo"
         />
+      </div>
+      <div v-else class="article__content mt-8">
+        <p class="text-lg font-thin text-gray-700 mt-6 italic text-center">
+          We couldn't find any water bodies for this fish species. Sorry.
+        </p>
       </div>
 
       <!-- table preamble -->
@@ -294,6 +299,16 @@ export default {
       querystring.append('per_page', this.query.perPage || 15)
 
       return querystring.toString()
+    },
+
+    hasWaterBodies () {
+      return this.waterBodies.geojson.features != null
+    },
+
+    numWaterBodies () {
+      return this.hasWaterBodies
+        ? this.waterBodies.geojson.features.length
+        : 0
     }
   },
 
