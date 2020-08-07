@@ -1,8 +1,7 @@
 <template>
-  <!-- eslint-disable -->
   <div class="flex flex-col lg:flex-row text-gray-700 h-full">
     <!-- map container -->
-    <main class="h-full w-full">
+    <main class="flex-1 w-full">
       <client-only>
         <fishable-waters-map
           :geojson="geojson"
@@ -126,7 +125,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 import geobuf from 'geobuf'
 import Pbf from 'pbf'
 import FishableWatersMap from '@/components/fishable-waters-map.vue'
