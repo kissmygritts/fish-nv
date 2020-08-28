@@ -42,8 +42,8 @@ class InfrastructureStack extends cdk.Stack {
 
     // Cluster attributes
     const clusterOutputs = {
-      'NAME': cluster.clusterName,
-      'SECGRPS': cluster.connections.securityGroups
+      'NAME': cluster.clusterName
+      // , 'SECGRPS': cluster.connections.securityGroups
     }
 
     // Frontend to backend services on 3000
@@ -86,10 +86,10 @@ class InfrastructureStack extends cdk.Stack {
       value: clusterOutputs.NAME,
       exportName: 'ECSClusterName'
     })
-    new cdk.CfnOutput(this, 'ECSSecGroup', {
-      value: clusterOutputs.SECGRPS,
-      exportName: 'ECSSecGrpList'
-    })
+    // new cdk.CfnOutput(this, 'ECSSecGroup', {
+    //   value: clusterOutputs.SECGRPS,
+    //   exportName: 'ECSSecGrpList'
+    // })
     new cdk.CfnOutput(this, 'ServicesSecGrp', {
       value: servicesSecurityGroup.securityGroupId,
       exportName: 'ServicesSecGrp'
