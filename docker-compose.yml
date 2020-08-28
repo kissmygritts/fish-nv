@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+    client:
+        build: ./app
+        ports:
+            - 3000:3000
+        depends_on: 
+            - api
+        environment: 
+            APIURL: https://api:8000
+    
+    api:
+        build: ./api
+        environment: 
+            DBURI: postgres://ndowspatial:zest-headband-solomon-metaphor@pgspatial.cotwjstfvxik.us-west-2.rds.amazonaws.com:5432/trophy_fish
