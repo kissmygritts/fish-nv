@@ -24,8 +24,10 @@ fastify.register(autoload, {
 const start = async () => {
   try {
     // from the docs, listen on 0.0.0.0 when deploying to containers, etc.
-    await fastify.listen({ port: 8000, host: '0.0.0.0' })
-    fastify.log.info(`server listening on ${fastify.server.address().port}`)
+    await fastify.listen({
+      port: process.env.PORT || 8000,
+      host: process.env.HOST || '0.0.0.0'
+    })
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)
