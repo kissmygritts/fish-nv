@@ -1,0 +1,45 @@
+{
+  "vpc-provider:account=248302884041:filter.tag:Name=FishNVStack/FishNv-VPC:region=us-west-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0e486f0323fe09689",
+    "vpcCidrBlock": "10.0.0.0/24",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Public",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-05128aab7a4e53c03",
+            "cidr": "10.0.0.0/26",
+            "availabilityZone": "us-west-1a",
+            "routeTableId": "rtb-098fca595e193750c"
+          },
+          {
+            "subnetId": "subnet-0f2912ada7f692a08",
+            "cidr": "10.0.0.64/26",
+            "availabilityZone": "us-west-1c",
+            "routeTableId": "rtb-0b6a3608022f4fccb"
+          }
+        ]
+      },
+      {
+        "name": "Private",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-0f1b46fd2917fe3b1",
+            "cidr": "10.0.0.128/26",
+            "availabilityZone": "us-west-1a",
+            "routeTableId": "rtb-0c9f7aca4ea89d93b"
+          },
+          {
+            "subnetId": "subnet-0617975fe2bf49a87",
+            "cidr": "10.0.0.192/26",
+            "availabilityZone": "us-west-1c",
+            "routeTableId": "rtb-0120d473e9657cf74"
+          }
+        ]
+      }
+    ]
+  }
+}
