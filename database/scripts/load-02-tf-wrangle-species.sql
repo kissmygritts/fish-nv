@@ -242,3 +242,4 @@ JOIN (
     LEFT JOIN etl.min_trophy_weight ON species.species = min_trophy_weight.species
 ) as sq ON t.id = sq.id
 WHERE public.species.id = sq.id;
+

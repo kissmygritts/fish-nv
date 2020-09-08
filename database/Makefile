@@ -2,7 +2,9 @@ DATA = /Users/mitchellgritts/Documents/projects/ndow/fish-nv/data
 LOADOBJS = scripts/load-01-fishable-waters.sql \
 					 scripts/load-02-tf-wrangle-species.sql \
 					 scripts/load-03-tf-wrangle-entries.sql \
-					 scripts/load-04-tf-entries.sql
+					 scripts/load-04-tf-entries.sql \
+					 scripts/load-05-tf-rm-species.sql
+# change URI for remote database
 URI = trophy_fish
 
 utfify: $(DATA)/trophy-fish-data.csv

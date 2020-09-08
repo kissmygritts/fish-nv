@@ -77,14 +77,14 @@ CREATE TABLE public.fishable_waters (
 
 CREATE TABLE public.species_water_joiner (
   id uuid PRIMARY KEY default uuid_generate_v4(),
-  species_id uuid references species(id),
-  water_id uuid references fishable_waters(id)
+  species_id uuid references species(id) ON DELETE CASCADE,
+  water_id uuid references fishable_waters(id) ON DELETE CASCADE
 );
 
 CREATE TABLE public.fish_entries (
   id uuid PRIMARY KEY default uuid_generate_v4(),
-  species_id uuid references species(id),
-  water_id uuid references fishable_waters(id),
+  species_id uuid references species(id) ON DELETE CASCADE,
+  water_id uuid references fishable_waters(id) ON DELETE CASCADE,
   date_caught date,
   pounds int,
   ounces int,    

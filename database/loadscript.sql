@@ -274,6 +274,7 @@ JOIN (
     LEFT JOIN etl.min_trophy_weight ON species.species = min_trophy_weight.species
 ) as sq ON t.id = sq.id
 WHERE public.species.id = sq.id;
+
 /* FIX COUNTIES */
 -- -- the test query
 -- SELECT 
@@ -449,3 +450,29 @@ SELECT
 FROM etl.fish_entries AS fe
 WHERE fe.species_id IS NOT NULL
   AND fe.water_id IS NOT NULL;
+/* DELETE FISH SPECIES NAME CLEANUP */
+-- edit names
+UPDATE species
+SET species = 'mountain whitefish'
+WHERE species = 'whitefish';
+
+UPDATE species
+SET species = 'Sacramento perch'
+WHERE species = 'sacramento perch';
+
+-- delete species
+DELETE 
+FROM species
+WHERE species = 'arctic grayling';
+
+DELETE
+FROM species
+WHERE species = 'golden trout';
+
+DELETE
+FROM species
+WHERE species = 'northern pike';
+
+DELETE
+FROM species
+WHERE species = 'silver salmon';
