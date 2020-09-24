@@ -1,245 +1,84 @@
-/* FORMAT MISSING SPECIES NAMES */
--- 1. create new column for Access DB species name
-ALTER TABLE etl.fs
-  ADD accdb_species_name text;
-
--- 2. move copy species to accdb_species_name
-UPDATE etl.fs
-  SET accdb_species_name = species;
-
--- 3. format species names that are missing from 
---    the fishable waters database in the same 
---    style as the fishable waters database.
-UPDATE etl.fs
-SET 
-  species = s.species_name
-FROM etl.fs as t
-  JOIN (
-    -- this subquery is formatting the species name from the Access database
-    -- eg: Trout, Brown -> brown trout, etc
-    SELECT
-      id,
-      CASE
-        WHEN comma = 0 THEN lower(species)
-        WHEN comma > 0 THEN lower(rhs || ' ' || lhs)
-      END AS species_name
-    FROM (
-      -- prepping species name for the case statement above
-      SELECT
-        id,
-        species,
-        position(',' in species) AS comma,
-        left(species, position(',' in species) - 1) AS lhs,
-        trim(both ' ' from right(species, char_length(species) - position(',' in species))) AS rhs
-      FROM etl.fs
-      WHERE tf_db_name IS NULL
-    ) AS sp
-  ) AS s ON t.id = s.id
-WHERE etl.fs.id = s.id;
-
--- 4. append formated species names to public.species
-INSERT INTO public.species 
-  (species)
-SELECT 
-  etl.fs.species
-FROM etl.fs
-  LEFT JOIN species ON etl.fs.tf_db_name = species.species
-WHERE species.species IS NULL;
-
-/* THESE GET UPDATED IN THE ETL.FS TABLE WITH THE ID */
--- 1. move species to the tf_db_name where null
-UPDATE etl.fs
-  set tf_db_name = species
-WHERE tf_db_name IS NULL;
-
--- 2. alter the table
-ALTER TABLE etl.fs
-  ADD species_id uuid;
-
--- 3. then add id from species table
-UPDATE etl.fs
-SET species_id = species.id
-FROM species
-WHERE etl.fs.tf_db_name = species.species;
-
-/* ADD SPECIES_ID TO THE ETL.FISH_ENTRIES TABLE */
--- 1. add species_id to table
-ALTER TABLE etl.fish_entries
-  ADD species_id uuid;
-
--- 2. update species_id to species.id
-UPDATE etl.fish_entries
-SET species_id = etl.fs.species_id
-FROM etl.fish_entries as t
-  JOIN etl.fs on t.species = etl.fs.accdb_species_name
-WHERE etl.fish_entries.species = etl.fs.accdb_species_name;
-
--- 3. update the singleton errors, 
---    the only reason I know these exist is because
---    of the following query. Subsequent updates query 
---    might need to change in the future. 
---    Query commented out for etl from Makefile
-
--- SELECT
---   etl.fs.species_id,
---   etl.fs.accdb_species_name,
---   etl.fish_entries.species,
---   etl.fish_entries.species_id
--- FROM etl.fish_entries
---   LEFT JOIN etl.fs 
---     ON etl.fish_entries.species = etl.fs.accdb_species_name
--- WHERE etl.fs.species_id IS NULL;
-
--- 4. Wiper
-UPDATE etl.fish_entries
-SET species_id = sq.species_id
-FROM (
-  SELECT 
-    species_id 
-  FROM etl.fs
-  WHERE tf_db_name = 'wiper'
-) AS sq
-WHERE etl.fish_entries.species IN ('Wiper', 'Wiper, White X Striped Bass Hybrid');
-
--- 5. Sunfish BlueGill -> bluegill sunfish
-UPDATE etl.fish_entries
-SET species_id = sq.species_id
-FROM (
-  SELECT 
-    species_id 
-  FROM etl.fs
-  WHERE tf_db_name = 'bluegill sunfish'
-) AS sq
-WHERE etl.fish_entries.species = 'Sunfish, BlueGill';
-
--- 6. Whitefish, Mountain* -> whitefish
---    note, that the asterisk will need to be included
---    in an exceptions column as unofficail state record
-UPDATE etl.fish_entries
-SET species_id = sq.species_id
-FROM (
-  SELECT 
-    species_id 
-  FROM etl.fs
-  WHERE tf_db_name = 'whitefish'
-) AS sq
-WHERE etl.fish_entries.species = 'Whitefish, Mountain*';
-
--- 7. Carp* -> carp
-UPDATE etl.fish_entries
-SET species_id = sq.species_id
-FROM (
-  SELECT 
-    species_id 
-  FROM etl.fs
-  WHERE tf_db_name = 'carp'
-) AS sq
-WHERE etl.fish_entries.species = 'Carp*';
-
--- 8. Pike, Northern* -> northern pike
-UPDATE etl.fish_entries
-SET species_id = sq.species_id
-FROM (
-  SELECT 
-    species_id 
-  FROM etl.fs
-  WHERE tf_db_name = 'northern pike'
-) AS sq
-WHERE etl.fish_entries.species = 'Pike, Northern*';
-
-/* INSERT SPECIES DESCRIPTIONS */
--- update scientific name
-UPDATE public.species
-SET scientific_name = sq.scientific_name
-FROM public.species AS t 
-JOIN (
-  SELECT
-    species.id,
-    species_descriptions.scientific_name
-  FROM species
-  JOIN etl.species_descriptions ON species.species = species_descriptions.species
-) as sq ON t.id = sq.id
-WHERE public.species.id = sq.id;
-
--- update description
-UPDATE public.species
-SET description = sq.description
-FROM public.species AS t 
-JOIN (
-  SELECT
-    species.id,
-    species_descriptions.description
-  FROM species
-  JOIN etl.species_descriptions ON species.species = species_descriptions.species
-) as sq ON t.id = sq.id
-WHERE public.species.id = sq.id;
-
--- update other names
-UPDATE public.species
-SET other_names = sq.other_names
-FROM public.species AS t 
-JOIN (
-  SELECT
-    species.id,
-    species_descriptions.other_names
-  FROM species
-  JOIN etl.species_descriptions ON species.species = species_descriptions.species
-) as sq ON t.id = sq.id
-WHERE public.species.id = sq.id;
-
-/* MINIMUM TROPHY WEIGHTS */
-CREATE TABLE etl.min_trophy_weight (
-  species text,
-  min_trophy_weight numeric
+/* FORMAT SPECIES NAMES WITH LKP TABLE */
+CREATE TABLE etl.species_lkp (
+  accdb_species text,
+  fw_species text
 );
 
-INSERT INTO etl.min_trophy_weight (
-  species, min_trophy_weight
-)
+-- lookup table
+INSERT INTO etl.species_lkp (accdb_species, fw_species)
 VALUES
-  ('largemouth bass', 5),
-  ('smallmouth bass', 3),
-  ('spotted bass', 2),
-  ('striped bass', 20),
-  ('white bass', 2),
-  ('carp', 15),
-  ('bullhead catfish', 1),
-  ('channel catfish', 10),
-  ('white catfish', 2),
-  ('black crappie', 2),
-  ('white crappie', 2),
-  ('sacramento perch', 2),
-  ('yellow perch', 0.5),
-  ('kokanee salmon', 2),
-  ('bluegill sunfish', 1),
-  ('green sunfish', 0.5),
-  ('pumpkinseed', 0.5),
-  ('redear sunfish', 0.5),
-  ('brook trout', 2),
-  ('brown trout', 5),
-  ('bull trout', 0.5),
-  ('cutthroat trout', 10),
-  ('mackinaw trout', 10),
-  ('rainbow trout', 5),
-  ('bowcutt trout', 10),
-  ('tiger trout', 2),
-  ('walleye', 6),
-  ('whitefish', 1),
-  ('wiper', 5),
-  ('arctic grayling', 0.5),
-  ('northern pike', 10),
-  ('silver salmon', 5);
+  ('Bass, Largemouth', 'largemouth bass'),
+  ('Bass, Smallmouth', 'smallmouth bass'),
+  ('Bass, Spotted', 'spotted bass'),
+  ('Bass, Striped', 'striped bass'),
+  ('Bass, White', 'white bass'),
+  ('Carp', 'carp'),
+  ('Carp*', 'carp'),
+  ('Catfish, Bullhead', 'bullhead catfish'),
+  ('Catfish, Channel', 'channel catfish'),
+  ('Catfish, White', 'white catfish'),
+  ('Crappie, Black', 'black crappie'),
+  ('Crappie, White', 'white crappie'),
+  ('Muskie, Tiger', 'tiger muskie'),
+  ('Perch, Sacramento', 'Sacramento perch'),
+  ('Perch, Yellow', 'yellow perch'),
+  ('Salmon, Kokanee', 'kokanee salmon'),
+  ('Sunfish, BlueGill', 'bluegill sunfish'),
+  ('Sunfish, Bluegill', 'bluegill sunfish'),
+  ('Sunfish, Green', 'green sunfish'),
+  ('Sunfish, Redear', 'redear sunfish'),
+  ('Trout, Brook', 'brook trout'),
+  ('Trout, Brown', 'brown trout'),
+  ('Trout, Bull', 'bull trout'),
+  ('Trout, Mackinaw', 'mackinaw trout'),
+  ('Trout, Rainbow', 'rainbow trout'),
+  ('Trout, Rainbow x Cutthroat', 'bowcutt trout'),
+  ('Trout, Tiger', 'tiger trout'),
+  ('Walleye', 'walleye'),
+  ('Whitefish, Mountain', 'mountain whitefish'),
+  ('Whitefish, Mountain*', 'mountain whitefish'),
+  ('Wiper', 'wiper'),
+  ('Wiper, White X Striped Bass Hybrid', 'wiper'),
+  ('Wiper, White x Striped Bass Hybrid', 'wiper'),
+  ('Sunfish, Pumpkinseed', 'pumpkinseed');
 
--- update species table with minimum trophy weight
-UPDATE public.species
-SET min_trophy_weight = sq.min_trophy_weight
-FROM public.species AS t 
-JOIN (
-  SELECT
-    species.id,
-    etl.min_trophy_weight.min_trophy_weight
-  FROM species
-    LEFT JOIN etl.min_trophy_weight ON species.species = min_trophy_weight.species
-) as sq ON t.id = sq.id
-WHERE public.species.id = sq.id;
+-- update species
+UPDATE etl.fish_entries
+SET
+  species = species_lkp.fw_species
+FROM etl.fish_entries s
+  JOIN etl.species_lkp ON s.species = species_lkp.accdb_species
+WHERE fish_entries.species = species_lkp.accdb_species;
 
+-- deal with cutthroat
+UPDATE etl.fish_entries
+SET
+  species = 'cutthroat trout'
+WHERE species = 'Trout, Cutthroat';
+
+-- delete species we don't want
+DELETE
+FROM etl.fish_entries
+WHERE species IN ('Grayling, Arctic', 'Pike, Northern', 'Pike, Northern*', 'Salmon, Silver', 'Trout, Golden');
+
+/* GET ID FROM SPECIES */
+-- 1. alter table to include water_id
+ALTER TABLE etl.fish_entries 
+ADD species_id uuid;
+
+-- 2. add id to etl table
+UPDATE etl.fish_entries
+SET species_id = species.species_id
+FROM etl.fish_entries AS fe
+  JOIN etl.species ON fe.species = species.species
+WHERE fish_entries.species = species.species;
+
+  JOIN(
+    SELECT 
+      fe.recno,
+      fw.id
+    FROM etl.fish_entries AS fe
+      LEFT JOIN fishable_waters AS fw ON fe.water = fw.water_name AND fe.county = fw.county
+    WHERE fw.id IS NOT NULL
+  ) AS sq ON fe.recno = sq.recno
+WHERE etl.fish_entries.recno = sq.recno;
