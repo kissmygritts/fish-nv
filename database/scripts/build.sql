@@ -6,21 +6,15 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE SCHEMA etl;
 
 CREATE TABLE etl.species (
-  abbr text,
-  species text
-);
-
-CREATE TABLE etl.species_descriptions (
   species text,
   abbr text,
   scientific_name text,
-  description text,
-  other_names text
+  min_trophy_weight text,
+  description text
 );
 
 CREATE TABLE etl.species_water_joiner (
   label text,
-  abbr text,
   species text
 );
 
@@ -62,16 +56,16 @@ CREATE TABLE public.species (
   abbr text,
   scientific_name text,
   min_trophy_weight numeric,
-  description text,
-  other_names text
+  description text
 );
 
 CREATE TABLE public.fishable_waters (
   id uuid PRIMARY KEY default uuid_generate_v4(),
   water_name text NOT NULL,
-  label text NOT NULL,
+  label text,
   county text,
   region text,
+  water_type text,
   geom geometry(Geometry, 4326) NOT NULL
 );
 
