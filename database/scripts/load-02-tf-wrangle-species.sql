@@ -73,12 +73,12 @@ FROM etl.fish_entries AS fe
   JOIN etl.species ON fe.species = species.species
 WHERE fish_entries.species = species.species;
 
-  JOIN(
-    SELECT 
-      fe.recno,
-      fw.id
-    FROM etl.fish_entries AS fe
-      LEFT JOIN fishable_waters AS fw ON fe.water = fw.water_name AND fe.county = fw.county
-    WHERE fw.id IS NOT NULL
-  ) AS sq ON fe.recno = sq.recno
-WHERE etl.fish_entries.recno = sq.recno;
+--   JOIN(
+--     SELECT 
+--       fe.recno,
+--       fw.id
+--     FROM etl.fish_entries AS fe
+--       LEFT JOIN fishable_waters AS fw ON fe.water = fw.water_name AND fe.county = fw.county
+--     WHERE fw.id IS NOT NULL
+--   ) AS sq ON fe.recno = sq.recno
+-- WHERE etl.fish_entries.recno = sq.recno;

@@ -26,6 +26,8 @@ ALTER TABLE etl.fishable_waters
 UPDATE etl.fishable_waters
   SET water_id = uuid_generate_v4();
 
+-- Warning: it is possible that there are empty geometries in
+-- the fishable waters data, filter
 INSERT INTO public.fishable_waters (
   id, water_name, label, county, region, geom
 )
@@ -36,9 +38,10 @@ SELECT
   etl.fishable_waters.county,
   etl.fishable_waters.region,
   etl.fishable_waters.geom
-FROM etl.fishable_waters;
+FROM etl.fishable_waters
+WHERE public.st_IsEmpty(geom) IS FALSE;
 
---
+-- 
 INSERT INTO  public.species_water_joiner (
   species_id, water_id
 )
@@ -47,4 +50,5 @@ SELECT
   fishable_waters.water_id
 FROM etl.species_water_joiner
   JOIN etl.species ON etl.species_water_joiner.species = etl.species.abbr
-  JOIN etl.fishable_waters ON etl.species_water_joiner.label = etl.fishable_waters.id;
+  JOIN etl.fishable_waters ON etl.species_water_joiner.label = etl.fishable_waters.id
+WHERE public.st_IsEmpty(fishable_waters.geom) IS FALSE;
