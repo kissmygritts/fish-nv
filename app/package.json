@@ -15,7 +15,7 @@
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/proxy": "^2.0.0",
     "geobuf": "^3.0.2",
-    "nuxt": "^2.0.0",
+    "nuxt": "^2.15.8",
     "nuxt-leaflet": "0.0.21",
     "pbf": "^3.2.1",
     "vue-good-table": "^2.19.5"
